@@ -11,7 +11,7 @@
 </svelte:head>
 
 <section in:fade>
-	<h1>Coden<strong>ai</strong>mes</h1>
+	<h1 class="bg-700-blue">Coden<strong>ai</strong>mes</h1>
 	<p>It's Codenames, but with AI</p>
 </section>
 

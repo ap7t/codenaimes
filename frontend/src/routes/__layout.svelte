@@ -1,13 +1,13 @@
 <script>
 	import Header from "$lib/header/Header.svelte";
-	import "../app.css";
+	import "../app.postcss";
 </script>
 
-<Header />
+<Header>
 
 <main>
-	<slot />
-</main>
+	<slot>
+</slot></main>
 
 <footer>
 	<p>Hacked together by Adam Purcell 2021 &copy;</p>
@@ -43,3 +43,5 @@
 		}
 	}
 </style>
+</Header>
+<slot></slot>
