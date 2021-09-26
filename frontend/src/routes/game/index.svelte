@@ -1,6 +1,6 @@
 <script>
-	import { fade } from 'svelte/transition';
-	let gameId;
+	import { fade } from "svelte/transition";
+	let gameId = "dev";
 </script>
 
 <svelte:head>

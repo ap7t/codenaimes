@@ -3,8 +3,7 @@
 </script>
 
 <script>
-	import Counter from '$lib/Counter.svelte';
-	import { fade } from 'svelte/transition';
+	import Counter from "$lib/Counter.svelte";
 </script>
 
 <svelte:head>
