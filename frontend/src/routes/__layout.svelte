@@ -3,11 +3,10 @@
 	import "../app.postcss";
 </script>
 
-<Header>
-
-<main>
-	<slot>
-</slot></main>
+<Header />
+<main class="flex flex-col justify-center items-center">
+	<slot />
+</main>
 
 <footer>
 	<p>Hacked together by Adam Purcell 2021 &copy;</p>
@@ -43,5 +42,3 @@
 		}
 	}
 </style>
-</Header>
-<slot></slot>

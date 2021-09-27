@@ -13,9 +13,27 @@
 	<br />
 	<strike><a href="/game/create">Play with AI</a></strike> Coming soon &#128064;
 	<hr />
-	<h1>Join an existing game</h1>
-	<input type="text" bind:value={gameId} placeholder="Enter existing gameId" />
-	<br />
-	<!-- TODO: check if the game actually exists first -->
-	<a href="/game/{gameId}/join/"> Join Game</a>
+
+	<div class="w-full max-w-xs my-4">
+		<h1>Join Game</h1>
+		<div class="mb-4">
+			<label class="block text-gray-700 text-sm font-bold mb-2" for="gameId"> Game ID </label>
+			<input
+				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+				id="username"
+				type="text"
+				placeholder="Game ID"
+				bind:value={gameId}
+			/>
+		</div>
+		<div class="flex items-center justify-between">
+			<a
+				href="/game/{gameId}/join"
+				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:no-underline"
+				type="button"
+			>
+				Join Game
+			</a>
+		</div>
+	</div>
 </div>
