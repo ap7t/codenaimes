@@ -1,11 +1,10 @@
 <script>
-	import Header from '$lib/header/Header.svelte';
-	import '../app.css';
+	import Header from "$lib/header/Header.svelte";
+	import "../app.postcss";
 </script>
 
 <Header />
-
-<main>
+<main class="flex flex-col justify-center items-center">
 	<slot />
 </main>
 
