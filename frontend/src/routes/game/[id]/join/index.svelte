@@ -38,7 +38,7 @@
 	</a>
 
 	<!-- Operative card -->
-	<a class="hover:no-underline" href="../{gameId}/player/spymaster">
+	<a class="hover:no-underline" href="../{gameId}/player/operative">
 		<div class="max-w-sm rounded overflow-hidden shadow-lg">
 			<div class="px-6 py-4">
 				<div class="font-bold text-xl mb-2 flex justify-between items-center">

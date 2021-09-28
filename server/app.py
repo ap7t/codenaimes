@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit, send, join_room
 from datetime import datetime
 import time
 
@@ -14,13 +14,14 @@ def hello():
     return render_template("index.html")
 
 @socket.on("message")
-def message(msg):
-    print(f"Received message: {msg}")
+def message(data):
+    print(data, type(data))
+    print(f"Received message: {data['message']}")
     now = datetime.today()
     fmt_time = now.strftime("%H:%M")
-    msg = f"{fmt_time}: {msg}"
+    msg = f"{fmt_time}: {data['message']}"
 
-    send(msg, broadcast=True)
+    emit("message", msg, room=data["gameId"])
 
 @socket.on("connect")
 def connect():
@@ -34,6 +35,11 @@ def disconnect():
 def notify(user):
    emit("notify", user, broadcast=True, skip_sid=request.sid) 
 
+@socket.on("join")
+def join(data):
+    game_id = data
+    print(game_id)
+    join_room(game_id)
 
 if __name__ == "__main__":
     socket.run(app, debug=True)
