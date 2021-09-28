@@ -43,7 +43,6 @@
 		{/each}
 	</ul>
 	<input type="text" placeholder="Your message" bind:value={message} on:keydown={onInput} />
-	<button on:click|preventDefault={debug} />
 </div>
 
 <style>
