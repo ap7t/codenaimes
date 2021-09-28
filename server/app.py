@@ -15,7 +15,6 @@ def hello():
 
 @socket.on("message")
 def message(data):
-    print(data, type(data))
     print(f"Received message: {data['message']}")
     now = datetime.today()
     fmt_time = now.strftime("%H:%M")
@@ -31,14 +30,15 @@ def connect():
 def disconnect():
     print(f"[CLIENT DISCONNECTED]: {request.sid}")
 
-@socket.on("notify")
-def notify(user):
-   emit("notify", user, broadcast=True, skip_sid=request.sid) 
+@socket.on("send-clue")
+def clue_sent(data):
+    clue = data["clue"]
+    print(clue)
+    emit("send-clue", clue, room=data["gameId"])
 
 @socket.on("join")
 def join(data):
     game_id = data
-    print(game_id)
     join_room(game_id)
 
 if __name__ == "__main__":
