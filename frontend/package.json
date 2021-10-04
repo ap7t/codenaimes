@@ -20,7 +20,7 @@
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.1",
-		"postcss": "^8.3.6",
+		"postcss": "^8.3.8",
 		"postcss-load-config": "^3.1.0",
 		"prettier": "^2.4.1",
 		"prettier-plugin-svelte": "^2.4.0",
@@ -35,10 +35,10 @@
 		"@fontsource/fira-mono": "^4.5.0",
 		"@lukeed/uuid": "^2.0.0",
 		"cookie": "^0.4.1",
-		"postcss-load-config": "^3.1.0",
 		"socket.io": "^4.2.0",
 		"socket.io-client": "^4.2.0",
 		"svelte-material-ui": "^5.0.0-beta.6",
-		"svelte-preprocess": "^4.9.5"
+		"svelte-preprocess": "^4.9.5",
+		"typescript": "^4.4.3"
 	}
 }

@@ -1,58 +1,51 @@
-<script>
+<script lang="ts">
+	import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons } from "@smui/card";
+	import Button, { Label } from "@smui/button";
+
 	import { page } from "$app/stores";
-
-	import { fade } from "svelte/transition";
-
 	let gameId = $page.params.id;
+
+	let clicked = 0;
 </script>
 
-<!-- 
-<div in:fade>
-	<h1>What will you join this game as</h1>
-	<p>
-		<a href="../{gameId}/player/spymaster">Spymaster</a>
-		<br />
-		<a href="../{gameId}/player/operative">Operative</a>
-	</p>
-</div> -->
+<div class="card-display">
+	<div class="card-container">
+		<Card>
+			<Content><h2>Spymaster</h2></Content>
+			<Content>Description of what a spymaster does</Content>
+			<Actions fullBleed>
+				<Button on:click={() => (window.location = `/game/${gameId}/player/spymaster`)}>
+					<Label>Join as Spymaster</Label>
+					<i class="material-icons" aria-hidden="true">arrow_forward</i>
+				</Button>
+			</Actions>
+		</Card>
+	</div>
 
-<h1>What will you join as?</h1>
-<div class="p-10 flex flex-row">
-	<!-- Spymaster card -->
-	<a class="hover:no-underline" href="../{gameId}/player/spymaster">
-		<div class="max-w-sm rounded overflow-hidden shadow-lg mx-6">
-			<div class="px-6 py-4">
-				<div class="font-bold text-xl mb-2 flex justify-between items-center">
-					Spymaster
-					<img class="w-auto h-10 w-10" src="/spymaster.png" alt="Spymaster" />
-				</div>
-				<p class="text-gray-700 text-base">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla!
-					Maiores et perferendis eaque, exercitationem praesentium nihil.
-					<br />
-					<br />
-					TODO: give details about what spymaster does
-				</p>
-			</div>
-		</div>
-	</a>
-
-	<!-- Operative card -->
-	<a class="hover:no-underline" href="../{gameId}/player/operative">
-		<div class="max-w-sm rounded overflow-hidden shadow-lg">
-			<div class="px-6 py-4">
-				<div class="font-bold text-xl mb-2 flex justify-between items-center">
-					Operative
-					<img class="w-auto h-10 w-10" src="/operative.png" alt="Operative" />
-				</div>
-				<p class="text-gray-700 text-base">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla!
-					Maiores et perferendis eaque, exercitationem praesentium nihil.
-					<br />
-					<br />
-					TODO: give details about what operative does
-				</p>
-			</div>
-		</div>
-	</a>
+	<div class="card-container">
+		<Card>
+			<Content><h2>Operative</h2></Content>
+			<Content>Description of what a operative does</Content>
+			<Actions fullBleed>
+				<Button on:click={() => (window.location = `/game/${gameId}/player/operative`)}>
+					<Label>Join as Operative</Label>
+					<i class="material-icons" aria-hidden="true">arrow_forward</i>
+				</Button>
+			</Actions>
+		</Card>
+	</div>
 </div>
+
+<style>
+	* :global(.card-media-16x9) {
+		background-image: url(https://place-hold.it/320x180?text=16x9&fontsize=23);
+	}
+
+	* :global(.card-media-square) {
+		background-image: url(https://place-hold.it/320x320?text=square&fontsize=23);
+	}
+
+	div {
+		padding-top: 10px;
+	}
+</style>
