@@ -6,14 +6,6 @@ const config = {
 		target: '#svelte'
 	},
 
-    vite: {
-		resolve: {
-			alias: {
-				"socket.io-client": "socket.io-client/dist/socket.io.js"
-			}
-		}
-	},
-
     preprocess: [preprocess({
         postcss: true
     })]
