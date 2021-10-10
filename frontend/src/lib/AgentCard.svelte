@@ -1,16 +1,46 @@
 <script>
+	import { page } from "$app/stores";
+	import { io } from "socket.io-client";
 	export let name;
 	export let num;
 	export let colour;
 
-	function showColour() {
-		console.log(`card-${num}`);
-		let card = document.getElementById(`card-${num}`);
-		card.style.backgroundColor = colour;
+	let background;
+
+	let gameId = $page.params.id;
+
+	const socket = io("http://localhost:5000");
+	console.log("in agent card");
+	console.log(colour);
+	console.log("^^^ colour");
+	$: {
+		switch (colour) {
+			case "R":
+				background = "red";
+				break;
+			case "B":
+				background = "blue";
+				break;
+			case "O":
+				background = "yellow";
+				break;
+			case "X":
+				background = "purple";
+				break;
+		}
+	}
+	console.log(background);
+	console.log("^^^ background");
+
+	function makeMove(card) {
+		console.log("made move");
+		let data = { card: card, gameId: gameId };
+		socket.emit("make_move", data);
+		console.log(background);
 	}
 </script>
 
-<div id="card-{num}" style="background-color: {colour}" on:click={showColour}>
+<div id="card-{num}" style="background-color: {background}" on:click={() => makeMove({ name })}>
 	{name}
 </div>
 
