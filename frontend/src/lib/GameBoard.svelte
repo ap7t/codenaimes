@@ -1,25 +1,25 @@
 <script lang="ts">
 	import AgentCard from "./AgentCard.svelte";
 	import { page } from "$app/stores";
-	import { io } from "socket.io-client";
 	import Dialog, { Title, Content, Actions } from "@smui/dialog";
+	import { socket } from "../socket.js";
 	import Button, { Label } from "@smui/button";
-	import { state } from "../stores";
+	import { state, guesses } from "../stores";
 	export let spymaster = false;
 
 	let data;
 	let redCount;
 	let blueCount;
 	let agents = [];
+	let solution = [];
 	let gameId = $page.params.id;
 	let open = false;
 	let assassinated = false;
 	let clicked;
 	let winner;
 	let winningMsg;
-	let i = 0;
+	let guessesLeft;
 
-	const socket = io("http://localhost:5000");
 	socket.on("connect", function () {
 		// TODO: maybe keep a record of the messages and show when joined but thats a future improvement
 		// console.log("connected");
@@ -29,28 +29,29 @@
 
 	socket.on("create_game", function (game) {
 		state.set(game);
-		console.log("should have got game");
+		// console.log("should have got game");
 		agents = Object.entries(game.board);
+		solution = Object.entries(game.solution);
 		redCount = game.red_agents;
 		blueCount = game.blue_agents;
-		console.log("=== agents from create game ===");
-		console.log(agents);
+		// console.log("=== agents from create game ===");
+		// console.log(agents);
 	});
 	state.subscribe((stateData) => {
 		if (Object.keys(stateData).length === 0) {
 			return;
 		}
 		data = stateData;
-		console.log("inside subscribe time: ", i);
-		i++;
-		console.log(data);
-		console.log("-- agents --");
-		console.log(data.board);
+		// console.log(data);
+		// console.log("-- agents --");
+		// console.log(data.board);
 		agents = Object.entries(data.board);
-		console.log(agents);
+		solution = Object.entries(data.solution);
+		// console.log(agents);
 		redCount = data.red_agents;
 		blueCount = data.blue_agents;
 		assassinated = data.assassinated;
+		guessesLeft = data.guesses;
 	});
 
 	// socket.on("send-state", function (game) {
@@ -67,7 +68,9 @@
 	// 	// console.log(agents);
 	// });
 	socket.on("send-state", function (game) {
-		console.log("should have got new state");
+		// console.log("should have got new state");
+		console.log("just got new game");
+		console.log(game.current_clue);
 		state.set(game);
 	});
 
@@ -88,6 +91,10 @@
 		winningMsg = "TODO: whatever team picked this lost";
 		open = true;
 	}
+
+	// guesses.subscribe((val) => {
+	// 	guesses.set = val;
+	// });
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -103,23 +110,34 @@
 		</Button>
 	</Actions>
 </Dialog>
-WHY IS THIS MISSING
+Do we even have a game state lol? {$state}
+<br />
+Game round {$state.round}
+<br />
+{$state.round % 2 == 0 ? "Red" : "Blue"} team's turn
+<br />
+guesses left: {guessesLeft}
 <div>
 	Red agents left: {redCount}
 	<br />
 	Blue agents left: {blueCount}
 	<br />
 	Assassinated {assassinated}
+	<br />
+	{#if guessesLeft > 0}
+		Guesses remaining: {guessesLeft}
+	{/if}
 </div>
 <div class="agentsGrid">
-	<p>AGENTS: {agents}</p>
-	{#each agents as agent, i}
-		{#if spymaster}
-			<AgentCard name={agent[0]} colour={agent[1]} num={i} />
-		{:else}
-			<AgentCard name={agent[0]} colour={agent[1]} num={i} />
-		{/if}
-	{/each}
+	{#if spymaster}
+		{#each solution as sol, i}
+			<AgentCard name={sol[0]} colour={sol[1]} num={i} spymaster={true} />
+		{/each}
+	{:else}
+		{#each agents as agent, i}
+			<AgentCard name={agent[0]} colour={agent[1]} num={i} spymaster={false} />
+		{/each}
+	{/if}
 
 	<!-- {state.board} -->
 </div>

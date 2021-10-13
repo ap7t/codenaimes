@@ -1,8 +1,7 @@
 <script>
-	import { io } from "socket.io-client";
 	import { state } from "../stores";
+	import { socket } from "../socket.js";
 
-	const socket = io("http://localhost:5000");
 	let gameId = "dev";
 	socket.on("connect", function () {
 		// TODO: maybe keep a record of the messages and show when joined but thats a future improvement

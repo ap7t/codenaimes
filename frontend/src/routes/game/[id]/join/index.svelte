@@ -11,7 +11,7 @@
 	import { page } from "$app/stores";
 	let gameId = $page.params.id;
 
-	let name = "";
+	let name = "dev";
 	let redblue = "Red";
 	let open = false;
 

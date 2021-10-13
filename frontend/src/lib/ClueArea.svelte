@@ -1,5 +1,5 @@
 <script>
-	import { io } from "socket.io-client";
+	import { socket } from "../socket.js";
 	import { page } from "$app/stores";
 	import { fade } from "svelte/transition";
 
@@ -7,8 +7,6 @@
 	let clues = [];
 
 	let gameId = $page.params.id;
-
-	const socket = io("http://localhost:5000");
 
 	socket.on("connect", function () {
 		socket.emit("join", gameId);
@@ -21,7 +19,9 @@
 </script>
 
 <div class="border-2">
-	<h4>Clues from Spymaster</h4>
+	<div>
+		<h4>Clues from Spymaster</h4>
+	</div>
 	<ul id="clues" class="border-2 border-black-700">
 		{#each clues as clue}
 			<li in:fade class="list-none">{clue}</li>

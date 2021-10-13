@@ -12,5 +12,4 @@
 <LinkGame />
 <ClueArea />
 <ChatArea />
---- game board ---
 <GameBoard />

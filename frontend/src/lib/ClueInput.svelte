@@ -1,20 +1,63 @@
-<script>
+<script lang="ts">
 	import { page } from "$app/stores";
-	import { io } from "socket.io-client";
+	import { socket } from "../socket.js";
+	import { team, state } from "../stores";
+	import Snackbar, { Actions, Label, SnackbarComponentDev } from "@smui/snackbar";
+	import IconButton from "@smui/icon-button";
 
-	let clue;
+	let prevClue = ""; // don't like this but it works
+	let clue = "dev 4";
+	let guesses;
 	let gameId = $page.params.id;
 
-	const socket = io("http://localhost:5000");
+	let notYourTurnSnackbar: SnackbarComponentDev;
+	let alreadySentClueSnackbar: SnackbarComponentDev;
+	console.log(prevClue, $state.current_clue, prevClue === $state.current_clue);
+	let canMove =
+		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
 
+	console.log($state);
+	console.log("can move", canMove);
+	console.log("team is red", $team === "Red");
+	console.log("round even", $state.round % 2);
+	console.log($state.gameId);
 	const onInput = (event) => {
-		console.log("func called");
-		if (event.key !== "Enter") return;
-		let data = { clue: clue, gameId: gameId };
+		if (event.key !== "Enter") {
+			return;
+		} else if (!canMove) {
+			notYourTurnSnackbar.open();
+			return;
+		} else if (prevClue === $state.current_clue) {
+			alreadySentClueSnackbar.open();
+			return;
+		}
+		guesses = parseInt(clue.split(" ")[1]);
+		let data = { clue: clue, guesses: guesses, gameId: gameId };
 		socket.emit("send-clue", data);
+		prevClue = clue;
 		clue = "";
 	};
 </script>
+
+here tho? {$state.round}
+<br />
+{$state.current_clue}
+<br />
+{canMove}
+
+<Snackbar bind:this={alreadySentClueSnackbar} timeoutMs={4000}>
+	<Label>You already sent your clue for this round!</Label>
+	<Actions>
+		<IconButton class="material-icons" title="Dismiss">close</IconButton>
+	</Actions>
+</Snackbar>
+
+<Snackbar bind:this={notYourTurnSnackbar} timeoutMs={4000}>
+	<Label>Hold your horses, it's not your turn!</Label>
+	<Actions>
+		<IconButton class="material-icons" title="Dismiss">close</IconButton>
+	</Actions>
+</Snackbar>
 
 <div class="mx-4">
 	<input
@@ -23,5 +66,7 @@
 		placeholder="Send clues"
 		bind:value={clue}
 		on:keydown={onInput}
+		pattern="\d"
+		title="One word followed by a number"
 	/>
 </div>

@@ -46,8 +46,9 @@ class Game:
         self.date_created = datetime.now()
         self.date_last_updated = self.date_created
         # TODO: self.players = players
-        self.num_rounds = 0
-        self.num_guesses = 0
+        self.round = 0
+        self.total_guesses = 0
+        self.guesses = 0
         self.teams = None
         self.red_agents = AGENTS_PER_TEAM
         self.blue_agents = AGENTS_PER_TEAM
@@ -55,6 +56,7 @@ class Game:
         self.board = None
         self.solution = None
         self.over = False
+        self.current_clue = None
         self.create_board()
 
     def to_json(self):
@@ -68,7 +70,10 @@ class Game:
             "teams": self.teams,
             "red_agents": self.red_agents,
             "blue_agents": self.blue_agents,
-            "assassinated": self.assassinated
+            "assassinated": self.assassinated,
+            "round": self.round,
+            "guesses": self.guesses,
+            "current_clue": self.current_clue
         }
 
     def create_board(self):
@@ -111,7 +116,13 @@ class Game:
         elif self.solution[word] == ASSASSIN and not self.board[word]:
             self.assassinated = True
         self.board[word] = self.solution[word]
+        # TODO: make rounds more than just one guess
+        self.guesses -= 1
+        if self.guesses == 0: 
+            self.round += 1
 
+    def set_guesses(self, guesses):
+        self.guesses = guesses
 
 
 if __name__ == "__main__":

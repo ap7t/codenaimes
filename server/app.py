@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "changeme"
 socket = SocketIO(app, cors_allowed_origins="*")
 
-ACTIVE_USERS = 0
+ACTIVE_USERS = -1 # app counts as a connection???
 ROOMS = {}
 
 @app.route('/')
@@ -26,41 +26,61 @@ def message(data):
 
 @socket.on("connect")
 def connect():
-    print(f"[CLIENT CONNECTED]: {request.sid}")
+    global ACTIVE_USERS
+    ACTIVE_USERS += 1 
+    print(f"\n\n[CLIENT CONNECTED]: {request.sid}")
+    print(f"total connected users: {ACTIVE_USERS}\n\n")
 
 @socket.on("disconnect")
 def disconnect():
-    print(f"[CLIENT DISCONNECTED]: {request.sid}")
+    global ACTIVE_USERS
+    ACTIVE_USERS -= 1 
+    print(f"\n\n[CLIENT DISCONNECTED]: {request.sid}")
+    print(f"total connected users: {ACTIVE_USERS}\n\n")
 
 @socket.on("send-clue")
 def clue_sent(data):
+    game = ROOMS[data["gameId"]] 
     clue = data["clue"]
-    print(clue)
+    game.set_guesses(data["guesses"]) 
+    print(">>>", game.guesses)
+    game.current_clue = clue
+    print(game.current_clue)
+    print(game.to_json())
+    emit("send-state", game.to_json(), room=data["gameId"])
     emit("send-clue", clue, room=data["gameId"])
 
 @socket.on("join")
 def join(data):
     game_id = data
     join_room(game_id)
+    # get the game that is associated with the room here
+    # emit("send-state", room=data["gameId"])
+
 
 @socket.on("make_move")
 def make_move(data):
-    print(f"got card {data['card']}")
     game = ROOMS[data["gameId"]]
-    print("---")
-    print(game.board)
-    game.flip_card(data["card"]["name"])
+    if not data["card"]:
+        game.round += 1
+        game.guesses = 0
+        emit("send-state", game.to_json(), room=data["gameId"])
+    else:
+        print(f"got card {data['card']}")
+        print("+++ ", game.guesses)
+        print("---")
+        print(game.board)
+        game.flip_card(data["card"]["name"])
 
-    print("---")       
-    print(game.board)
-    emit("send-state", game.to_json(), room=data["gameId"])
+        print("---")       
+        print(game.board)
+        emit("send-state", game.to_json(), room=data["gameId"])
 
 @socket.on("create_game")
 def create_game(gameId):
     game = Game()
     ROOMS[gameId] = game
     emit("create_game", game.to_json(), room=gameId)
-
 
 if __name__ == "__main__":
     socket.run(app, debug=True)

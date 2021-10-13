@@ -1,5 +1,5 @@
 <script>
-	import { io } from "socket.io-client";
+import { socket } from "../socket.js";
 	import { fly } from "svelte/transition";
 	import { page } from "$app/stores";
 
@@ -8,7 +8,6 @@
 	let gameLink;
 	let gameId = $page.params.id;
 
-	const socket = io("http://localhost:5000");
 
 	socket.on("connect", function () {
 		// TODO: maybe keep a record of the messages and show when joined but thats a future improvement

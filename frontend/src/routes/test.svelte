@@ -1,13 +1,20 @@
 <script lang="ts">
-	import { state } from "../stores";
+	import { socket } from "../socket.js";
 	let data;
-	let unsubscribe = state.subscribe((stateData) => {
-		data = stateData;
-		console.log(data);
+	console.log(socket);
+	socket.on("connection", function () {
+		data = "penis";
 	});
+
+	function fn() {
+		console.log("sending socket thing");
+		socket.emit("penis", "from client");
+		console.log("should have sent");
+	}
 </script>
 
 <div>
-	<h1>Game state:</h1>
+	test
 	{data}
 </div>
+<button on:click={fn}> press me </button>
