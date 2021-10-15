@@ -117,12 +117,17 @@ class Game:
             self.assassinated = True
         self.board[word] = self.solution[word]
         # TODO: make rounds more than just one guess
+    
+    def decrement_guesses(self):
         self.guesses -= 1
         if self.guesses == 0: 
             self.round += 1
 
     def set_guesses(self, guesses):
         self.guesses = guesses
+
+    def __str__(self):
+        return str(self.solution)
 
 
 if __name__ == "__main__":

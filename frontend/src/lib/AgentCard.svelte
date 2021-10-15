@@ -55,13 +55,13 @@
 			switch ($state.solution[name]) {
 				case "B":
 					msg = "Oof, that's a blue agent, moving onto the next round";
-					break;
+
 				case "O":
 					msg = "Oof, that's a civilian, moving onto the next round";
 					break;
 			}
 			wrongCardSnackbar.open();
-			let data = { card: null, gameId: gameId };
+			let data = { card: card, gameId: gameId, correct: false };
 			socket.emit("make_move", data);
 		} else if ($state.round % 2 != 0 && $state.solution[name] != "B") {
 			switch ($state.solution[name]) {
@@ -73,11 +73,11 @@
 					break;
 			}
 			wrongCardSnackbar.open();
-			let data = { card: null, gameId: gameId };
+			let data = { card: card, gameId: gameId, correct: false };
 			socket.emit("make_move", data);
 		} else {
 			console.log("making move");
-			let data = { card: card, gameId: gameId };
+			let data = { card: card, gameId: gameId, correct: true };
 			socket.emit("make_move", data);
 		}
 	}

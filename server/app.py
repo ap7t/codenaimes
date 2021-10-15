@@ -52,18 +52,24 @@ def clue_sent(data):
 
 @socket.on("join")
 def join(data):
+    print("--- Inside join func ---")
     game_id = data
     join_room(game_id)
+    game = ROOMS[game_id]
     # get the game that is associated with the room here
-    # emit("send-state", room=data["gameId"])
+    print(game)
+    emit("send-state", game.to_json(), room=game_id)
 
 
 @socket.on("make_move")
 def make_move(data):
     game = ROOMS[data["gameId"]]
-    if not data["card"]:
+    print(data)
+    if not data["correct"]:
+        game.flip_card(data["card"]["name"])
         game.round += 1
         game.guesses = 0
+
         emit("send-state", game.to_json(), room=data["gameId"])
     else:
         print(f"got card {data['card']}")
@@ -71,6 +77,7 @@ def make_move(data):
         print("---")
         print(game.board)
         game.flip_card(data["card"]["name"])
+        game.decrement_guesses()
 
         print("---")       
         print(game.board)
@@ -78,9 +85,10 @@ def make_move(data):
 
 @socket.on("create_game")
 def create_game(gameId):
-    game = Game()
+    game = Game(gameId)
     ROOMS[gameId] = game
-    emit("create_game", game.to_json(), room=gameId)
+    print(game)
+    # emit("create_game", game.to_json(), room=gameId)
 
 if __name__ == "__main__":
     socket.run(app, debug=True)

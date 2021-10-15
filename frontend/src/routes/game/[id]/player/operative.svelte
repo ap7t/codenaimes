@@ -4,6 +4,8 @@
 	import GameBoard from "$lib/GameBoard.svelte";
 	import LinkGame from "$lib/LinkGame.svelte";
 	import { team, username } from "../../../../stores.js";
+
+
 </script>
 
 <h1>You joined as a operative</h1>

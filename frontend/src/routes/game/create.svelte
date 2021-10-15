@@ -1,6 +1,18 @@
 <script>
 	import { fade } from "svelte/transition";
+	import Button, { Label } from "@smui/button";
+	import { socket } from "../../socket.js";
+	import { goto } from "$app/navigation";
+	import Textfield from "@smui/textfield";
+	import HelperText from "@smui/textfield/helper-text/index";
+
 	let gameId = "dev";
+
+	function createGame() {
+		socket.emit("create_game", gameId);
+		console.log("created game");
+		goto(`/game/${gameId}/join`);
+	}
 </script>
 
 <svelte:head>
@@ -8,23 +20,23 @@
 </svelte:head>
 
 <div in:fade class="w-full max-w-xs">
-	<div class="mb-4">
-		<label class="block text-gray-700 text-sm font-bold mb-2" for="gameId"> Game ID </label>
-		<input
-			class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-			id="username"
-			type="text"
-			placeholder="Game ID"
-			bind:value={gameId}
-		/>
-	</div>
-	<div class="flex items-center justify-between">
-		<a
-			href="/game/{gameId}/join"
-			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:no-underline"
-			type="button"
+	<Textfield id="gameId" variant="outlined" required={true} bind:value={gameId} label="Game ID">
+		<HelperText slot="helper"
+			>Enter a word that will be used as the Game ID so your friends can join</HelperText
 		>
-			Create Game
-		</a>
-	</div>
+	</Textfield>
+
+	<Button on:click={createGame}>
+		<Label>Create game</Label>
+	</Button>
 </div>
+
+<style>
+	div {
+		margin-top: 50px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+	}
+</style>

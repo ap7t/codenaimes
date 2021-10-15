@@ -5,6 +5,8 @@
 	import { socket } from "../socket.js";
 	import Button, { Label } from "@smui/button";
 	import { state, guesses } from "../stores";
+	import { onMount } from "svelte";
+
 	export let spymaster = false;
 
 	let data;
@@ -20,23 +22,16 @@
 	let winningMsg;
 	let guessesLeft;
 
-	socket.on("connect", function () {
-		// TODO: maybe keep a record of the messages and show when joined but thats a future improvement
-		// console.log("connected");
-		socket.emit("join", gameId);
-		socket.emit("create_game", gameId);
-	});
-
-	socket.on("create_game", function (game) {
-		state.set(game);
-		// console.log("should have got game");
-		agents = Object.entries(game.board);
-		solution = Object.entries(game.solution);
-		redCount = game.red_agents;
-		blueCount = game.blue_agents;
-		// console.log("=== agents from create game ===");
-		// console.log(agents);
-	});
+	// socket.on("join_game", function (game) {
+	// 	state.set(game);
+	// 	// console.log("should have got game");
+	// 	agents = Object.entries(game.board);
+	// 	solution = Object.entries(game.solution);
+	// 	redCount = game.red_agents;
+	// 	blueCount = game.blue_agents;
+	// 	// console.log("=== agents from create game ===");
+	// 	// console.log(agents);
+	// });
 	state.subscribe((stateData) => {
 		if (Object.keys(stateData).length === 0) {
 			return;
@@ -71,6 +66,7 @@
 		// console.log("should have got new state");
 		console.log("just got new game");
 		console.log(game.current_clue);
+		console.log(game);
 		state.set(game);
 	});
 
