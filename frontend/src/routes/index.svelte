@@ -1,9 +1,9 @@
-<script context="module">
+<script lang="ts">
 	export const prerender = true;
-</script>
+	import AgentCard from "$lib/AgentCard.svelte";
 
-<script>
 	import { fade, fly } from "svelte/transition";
+	let test = "test";
 </script>
 
 <svelte:head>
@@ -16,6 +16,10 @@
 	</h1>
 	<p>It's Codenames, but with AI</p>
 </section>
+<AgentCard name={"red"} colour="R" />
+<AgentCard name={"blue"} colour="B" />
+<AgentCard name={"civilian"} colour="O" />
+<AgentCard name={"assassin"} colour="X" />
 
 <style>
 	section {

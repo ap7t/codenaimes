@@ -8,12 +8,11 @@
 
 	let gameId = $page.params.id;
 	console.log("joined game");
-	socket.emit("join", gameId);
+	// socket.emit("join", gameId);
 </script>
 
 <h1>You joined as a spymaster</h1>
 <h1>Team: {$team}</h1>
 <!-- can probably do this better as operative and spymaster screens will have the same layout for the top -->
-<LinkGame />
 <ClueInput />
 <GameBoard spymaster="true" />

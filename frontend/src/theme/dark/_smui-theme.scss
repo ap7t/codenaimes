@@ -4,7 +4,7 @@
 
 // Svelte Colors! (Dark Theme)
 @use '@material/theme/index' as theme with (
-  $primary: #ff3e00,
+  $primary: #55ff00,
   $secondary: color.scale(#676778, $whiteness: -10%),
   $surface: color.adjust(color-palette.$grey-900, $blue: +4),
   $background: #000,
@@ -13,7 +13,7 @@
 
 html,
 body {
-  background-color: #000;
+  background-color: #121212;
   color: theme.$on-surface;
 }
 
@@ -22,4 +22,28 @@ a {
 }
 a:visited {
   color: color.scale(#40b3ff, $lightness: -35%);
+}
+
+.redAgent {
+  background-color: rgb(199, 45, 45);
+  
+}
+
+
+.blueAgent {
+  background-color: rgb(28, 28, 186);
+}
+
+.civilian {
+  background-color: #856b0d;
+}
+
+.assassin {
+  background-color: rgb(29, 2, 29);
+}
+
+.agentCard {
+  text-transform: uppercase;
+  padding: 50px;
+  text-align: center;
 }

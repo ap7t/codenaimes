@@ -9,10 +9,10 @@ import { socket } from "../socket.js";
 	let gameId = $page.params.id;
 
 
-	socket.on("connect", function () {
-		// TODO: maybe keep a record of the messages and show when joined but thats a future improvement
-		socket.emit("join", gameId);
-	});
+	// socket.on("connect", function () {
+	// 	// TODO: maybe keep a record of the messages and show when joined but thats a future improvement
+	// 	socket.emit("join", gameId);
+	// });
 
 	socket.on("message", function (message) {
 		console.log("received message");

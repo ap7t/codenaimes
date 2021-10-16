@@ -11,7 +11,4 @@ username.subscribe((val) => browser && localStorage.setItem("username", val));
 
 export const state = writable({});
 
-export const guesses = writable(0)
-
-// export const guesses = writable();
     

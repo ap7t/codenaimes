@@ -7,24 +7,32 @@
 	import Radio from "@smui/radio";
 	import FormField from "@smui/form-field";
 	import { goto } from "$app/navigation";
-	import { username, team } from "../../../../stores";
+	import { state, username, team } from "../../../../stores";
 	import { page } from "$app/stores";
+	import { socket } from "../../../../socket";
 	let gameId = $page.params.id;
 
 	let name = "dev";
 	let redblue = "Red";
 	let open = false;
+	let pt;
 
 	$: $username = name;
 	$: $team = redblue;
 
 	function handleSubmit(playerType) {
+		pt = playerType;
 		if (name === "") {
 			open = true;
 		} else {
-			goto(`/game/${gameId}/player/${playerType}`);
+			socket.emit("join", gameId);
 		}
 	}
+
+	socket.on("send-state", function (game) {
+		$state = game;
+		goto(`/game/${gameId}/player/${pt}`);
+	});
 
 	function focusOnInput() {
 		open = false;
@@ -41,7 +49,6 @@
 		</Button>
 	</Actions>
 </Dialog>
-{open}
 <div>
 	<div>
 		<Textfield id="nameInput" variant="outlined" required={true} bind:value={name} label="Name">

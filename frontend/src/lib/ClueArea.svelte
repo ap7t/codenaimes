@@ -8,9 +8,9 @@
 
 	let gameId = $page.params.id;
 
-	socket.on("connect", function () {
-		socket.emit("join", gameId);
-	});
+	// socket.on("connect", function () {
+	// 	socket.emit("join", gameId);
+	// });
 
 	socket.on("send-clue", function (clue) {
 		clues = [...clues, clue];

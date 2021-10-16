@@ -5,7 +5,8 @@
 	import { socket } from "../socket.js";
 	import Button, { Label } from "@smui/button";
 	import { state, guesses } from "../stores";
-	import { onMount } from "svelte";
+	import LayoutGrid, { Cell, InnerGrid } from "@smui/layout-grid";
+	import GameStats from "./GameStats.svelte";
 
 	export let spymaster = false;
 
@@ -22,52 +23,28 @@
 	let winningMsg;
 	let guessesLeft;
 
-	// socket.on("join_game", function (game) {
-	// 	state.set(game);
-	// 	// console.log("should have got game");
-	// 	agents = Object.entries(game.board);
-	// 	solution = Object.entries(game.solution);
-	// 	redCount = game.red_agents;
-	// 	blueCount = game.blue_agents;
-	// 	// console.log("=== agents from create game ===");
+	// state.subscribe((stateData) => {
+	// 	if (Object.keys(stateData).length === 0) {
+	// 		return;
+	// 	}
+	// 	data = stateData;
+	// 	// console.log(data);
+	// 	// console.log("-- agents --");
+	// 	// console.log(data.board);
+	// 	agents = Object.entries(data.board);
+	// 	solution = Object.entries(data.solution);
 	// 	// console.log(agents);
+	// 	redCount = data.red_agents;
+	// 	blueCount = data.blue_agents;
+	// 	assassinated = data.assassinated;
+	// 	guessesLeft = data.guesses;
 	// });
-	state.subscribe((stateData) => {
-		if (Object.keys(stateData).length === 0) {
-			return;
-		}
-		data = stateData;
-		// console.log(data);
-		// console.log("-- agents --");
-		// console.log(data.board);
-		agents = Object.entries(data.board);
-		solution = Object.entries(data.solution);
-		// console.log(agents);
-		redCount = data.red_agents;
-		blueCount = data.blue_agents;
-		assassinated = data.assassinated;
-		guessesLeft = data.guesses;
-	});
 
-	// socket.on("send-state", function (game) {
-	// 	console.log("should have got new state");
-	// 	// console.log(game);
-	// 	$state = game;
-	// 	const newAgents = Object.entries(game.board);
-	// 	agents = [...agents, ["testing", "G"]];
-	// 	agents = newAgents;
-	// 	redCount = state.red_agents;
-	// 	blueCount = state.blue_agents;
-	// 	// console.log(agents);
-
-	// 	// console.log(agents);
-	// });
 	socket.on("send-state", function (game) {
-		// console.log("should have got new state");
 		console.log("just got new game");
-		console.log(game.current_clue);
+		// console.log(game.current_clue);
 		console.log(game);
-		state.set(game);
+		$state = game;
 	});
 
 	$: if (redCount == 0) {
@@ -87,10 +64,6 @@
 		winningMsg = "TODO: whatever team picked this lost";
 		open = true;
 	}
-
-	// guesses.subscribe((val) => {
-	// 	guesses.set = val;
-	// });
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -106,31 +79,17 @@
 		</Button>
 	</Actions>
 </Dialog>
-Do we even have a game state lol? {$state}
-<br />
-Game round {$state.round}
-<br />
-{$state.round % 2 == 0 ? "Red" : "Blue"} team's turn
-<br />
-guesses left: {guessesLeft}
-<div>
-	Red agents left: {redCount}
-	<br />
-	Blue agents left: {blueCount}
-	<br />
-	Assassinated {assassinated}
-	<br />
-	{#if guessesLeft > 0}
-		Guesses remaining: {guessesLeft}
-	{/if}
-</div>
+
+<GameStats />
+{$state == {}}
+{$state}
 <div class="agentsGrid">
-	{#if spymaster}
-		{#each solution as sol, i}
+	{#if spymaster && $state != {}}
+		{#each $state.solution as sol, i}
 			<AgentCard name={sol[0]} colour={sol[1]} num={i} spymaster={true} />
 		{/each}
 	{:else}
-		{#each agents as agent, i}
+		{#each $state.board as agent, i}
 			<AgentCard name={agent[0]} colour={agent[1]} num={i} spymaster={false} />
 		{/each}
 	{/if}
@@ -140,11 +99,16 @@ guesses left: {guessesLeft}
 
 <style>
 	.agentsGrid {
-		width: 600px;
+		/* Activate grid layout */
 		display: grid;
-		grid-gap: 75px;
-		grid-template-columns: repeat(5, 100px);
-		grid-template-rows: repeat(5, 100px);
-		grid-auto-flow: column;
+
+		/* Create 5 columns, each 1 "fractional unit" wide */
+		grid-template-columns: repeat(5, 1fr);
+
+		/* Create 5 rows, each 1 "fractional unit" high */
+		grid-template-rows: repeat(5, 1fr);
+
+		/* Add a 10px gap between columns and rows */
+		grid-gap: 10px;
 	}
 </style>

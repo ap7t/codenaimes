@@ -63,8 +63,8 @@ class Game:
         return {
             "gameId": self.gameId,
             "start_colour": self.start_colour,
-            "board": self.board,
-            "solution": self.solution,
+            "board": list(self.board.items()),
+            "solution": list(self.solution.items()),
             "date_created": str(self.date_created),
             "date_last_updated": str(self.date_last_updated),
             "teams": self.teams,

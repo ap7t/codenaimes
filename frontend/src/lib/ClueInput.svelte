@@ -39,12 +39,6 @@
 	};
 </script>
 
-here tho? {$state.round}
-<br />
-{$state.current_clue}
-<br />
-{canMove}
-
 <Snackbar bind:this={alreadySentClueSnackbar} timeoutMs={4000}>
 	<Label>You already sent your clue for this round!</Label>
 	<Actions>

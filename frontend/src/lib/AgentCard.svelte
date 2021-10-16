@@ -2,32 +2,34 @@
 	import { page } from "$app/stores";
 	import { socket } from "../socket.js";
 	import { team, state, guesses } from "../stores.js";
-	import Snackbar, { Actions, Label, SnackbarComponentDev } from "@smui/snackbar";
+	import Snackbar, { SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
+	import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons } from "@smui/card";
+	import Button, { Label } from "@smui/button";
 
-	export let name;
+	export let name = "teest";
 	export let num;
 	export let colour;
 	export let spymaster;
 	let msg;
 
-	let background;
+	let classString = "agentCard";
 
 	let gameId = $page.params.id;
 
 	$: {
 		switch (colour) {
 			case "R":
-				background = "red";
+				classString += " redAgent";
 				break;
 			case "B":
-				background = "blue";
+				classString += " blueAgent";
 				break;
 			case "O":
-				background = "#FFD333";
+				classString += " civilian";
 				break;
 			case "X":
-				background = "purple";
+				classString += " assassin";
 				break;
 		}
 	}
@@ -38,7 +40,7 @@
 	let wrongCardSnackbar: SnackbarComponentDev;
 
 	console.log($state.solution);
-	console.log($state.solution.glow);
+	// console.log($state.solution.glow);
 
 	function makeMove(card) {
 		let canMove =
@@ -111,19 +113,8 @@
 	</Actions>
 </Snackbar>
 
-<div id="card-{num}" style="background-color: {background}" on:click={() => makeMove({ name })}>
-	{name}
-	{$state.solution[name]}
-</div>
-
-<style>
-	div {
-		text-transform: uppercase;
-		margin: 1em;
-		padding-top: 2em;
-		border: 1px solid black;
-		height: 100px;
-		width: 100px;
-		text-align: center;
-	}
-</style>
+<Card>
+	<PrimaryAction on:click={() => makeMove({ name })} padded class={classString}>
+		{name}
+	</PrimaryAction>
+</Card>
