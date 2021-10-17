@@ -17,11 +17,8 @@ def hello():
 
 @socket.on("message")
 def message(data):
-    now = datetime.today()
-    fmt_time = now.strftime("%H:%M")
-    msg = f"{fmt_time}: {data['message']}"
-
-    emit("message", msg, room=data["gameId"])
+    data["timestamp"] = datetime.today().strftime("%H:%M")
+    emit("message", data, room=data["gameId"])
 
 @socket.on("connect")
 def connect():

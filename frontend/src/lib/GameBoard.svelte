@@ -15,33 +15,6 @@
 	let winningMsg;
 	$: whoLost = $state.round % 2 != 0 ? "Red" : "Blue";
 
-	// let data;
-	// let redCount;
-	// let blueCount;
-	// let agents = [];
-	// let solution = [];
-	// let gameId = $page.params.id;
-	// let assassinated = false;
-	// let clicked;
-	// let guessesLeft;
-
-	// state.subscribe((stateData) => {
-	// 	if (Object.keys(stateData).length === 0) {
-	// 		return;
-	// 	}
-	// 	data = stateData;
-	// 	// console.log(data);
-	// 	// console.log("-- agents --");
-	// 	// console.log(data.board);
-	// 	agents = Object.entries(data.board);
-	// 	solution = Object.entries(data.solution);
-	// 	// console.log(agents);
-	// 	redCount = data.red_agents;
-	// 	blueCount = data.blue_agents;
-	// 	assassinated = data.assassinated;
-	// 	guessesLeft = data.guesses;
-	// });
-
 	socket.on("send-state", function (game) {
 		console.log("just got new state");
 		// console.log(game.current_clue);

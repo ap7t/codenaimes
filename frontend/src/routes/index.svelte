@@ -11,15 +11,9 @@
 </svelte:head>
 
 <section in:fade>
-	<h1>
-		Coden<strong>ai</strong>mes
-	</h1>
+	<p>Coden<b>ai</b>mes</p>
 	<p>It's Codenames, but with AI</p>
 </section>
-<AgentCard name={"red"} colour="R" />
-<AgentCard name={"blue"} colour="B" />
-<AgentCard name={"civilian"} colour="O" />
-<AgentCard name={"assassin"} colour="X" />
 
 <style>
 	section {

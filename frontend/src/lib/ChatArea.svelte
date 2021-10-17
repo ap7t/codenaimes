@@ -1,67 +1,93 @@
-<script>
-import { socket } from "../socket.js";
+<script lang="ts">
+	import { socket } from "../socket.js";
 	import { fly } from "svelte/transition";
 	import { page } from "$app/stores";
+	import { username, team } from "../stores";
+	import Textfield from "@smui/textfield";
+	import Icon from "@smui/textfield/icon";
 
-	let message;
-	let messages = [];
 	let gameLink;
 	let gameId = $page.params.id;
+	let message = "";
+	let messages = [];
 
-
-	// socket.on("connect", function () {
-	// 	// TODO: maybe keep a record of the messages and show when joined but thats a future improvement
-	// 	socket.emit("join", gameId);
-	// });
-
-	socket.on("message", function (message) {
+	socket.on("message", function (data) {
 		console.log("received message");
-		console.log(messages);
-		messages = [...messages, message];
+		messages = [...messages, data];
+		let objDiv = document.getElementById("messages");
+		objDiv.scrollTop = objDiv.scrollHeight;
 	});
 
 	const onInput = (event) => {
 		if (event.key !== "Enter") return;
-		let data = { message: message, gameId: gameId };
+		let data = { username: $username, team: $team, message: message, gameId: gameId };
 		socket.emit("message", data);
-		// messages = [...messages, message];
 		message = "";
 	};
-
-	function debug() {
-		console.log("pressed debug");
-		messages = [...messages, "debug"];
-		console.log(messages);
-	}
 </script>
 
 <div>
-	<ul id="messages">
-		{#each messages as message}
-			<li in:fly={{ x: -200, duration: 1000 }}>{message}</li>
-		{/each}
-	</ul>
-	<input type="text" placeholder="Your message" bind:value={message} on:keydown={onInput} />
+	<div class="scrollHider">
+		<h1>Chat</h1>
+		<div class="messages">
+			{#each messages as message, i}
+				<p>
+					<span class={message.team.toLowerCase()}>{message.username}</span>
+					<span class="time">{message.timestamp}</span>
+					<br />
+					{message.message}
+				</p>
+			{/each}
+		</div>
+	</div>
 </div>
+<Textfield variant="outlined" bind:value={message} label="Message" on:keydown={onInput}>
+	<Icon class="material-icons" slot="leadingIcon">chat</Icon>
+</Textfield>
 
 <style>
-	li {
-		list-style-type: none;
-	}
-
-	ul {
+	.scrollHider {
+		width: 100%;
 		height: 400px;
-		width: 200px;
-		border: 1px black solid;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		overflow: hidden;
 	}
 
-	input {
-		width: 200px;
+	.messages {
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+		box-sizing: content-box; /* So the width will be 100% + 17px */
+		margin-left: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: left;
+		background-color: #121212;
 	}
 
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
+	p {
+		padding: 5px;
+		margin: 10px 0;
+		text-transform: uppercase;
+		/* width: auto; */
+	}
+	span {
+		font-weight: 900;
+	}
+
+	.red {
+		color: red;
+	}
+
+	.blue {
+		color: #2767ff;
+	}
+
+	.time {
+		color: rgb(155 149 147);
+		font-size: 0.75rem;
 	}
 </style>

@@ -1,6 +1,6 @@
 <script>
-	import { page } from '$app/stores';
-	import logo from './github-logo.svg';
+	import { page } from "$app/stores";
+	import logo from "./github-logo.svg";
 </script>
 
 <header>
@@ -15,9 +15,9 @@
 			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
 		</svg>
 		<ul>
-			<li class:active={$page.path === '/'}><a sveltekit:prefetch href="/">Home</a></li>
-			<li class:active={$page.path === '/about'}><a sveltekit:prefetch href="/about">About</a></li>
-			<li class:active={$page.path === '/game/'}>
+			<li class:active={$page.path === "/"}><a sveltekit:prefetch href="/">Home</a></li>
+			<li class:active={$page.path === "/about"}><a sveltekit:prefetch href="/about">About</a></li>
+			<li class:active={$page.path === "/game/"}>
 				<a sveltekit:prefetch href="/game/">Play</a>
 			</li>
 		</ul>
@@ -35,6 +35,7 @@
 	header {
 		display: flex;
 		justify-content: space-between;
+		font-family: "Roboto";
 	}
 
 	.corner {
@@ -92,7 +93,7 @@
 
 	li.active::before {
 		--size: 6px;
-		content: '';
+		content: "";
 		width: 0;
 		height: 0;
 		position: absolute;

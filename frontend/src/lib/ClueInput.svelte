@@ -4,6 +4,9 @@
 	import { team, state } from "../stores";
 	import Snackbar, { Actions, Label, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
+	import Textfield from "@smui/textfield";
+	import HelperText from "@smui/textfield/helper-text/index";
+	import Icon from "@smui/textfield/icon";
 
 	let prevClue = ""; // don't like this but it works
 	let clue = "dev 4";
@@ -53,16 +56,7 @@
 	</Actions>
 </Snackbar>
 
-<div class="mx-4">
-	prev clue: {prevClue}
-	current clue: {$state.current_clue}
-	<input
-		class="round-lg"
-		type="text"
-		placeholder="Send clues"
-		bind:value={clue}
-		on:keydown={onInput}
-		pattern="\d"
-		title="One word followed by a number"
-	/>
-</div>
+<Textfield variant="outlined" bind:value={clue} label="Clue" on:keydown={onInput}>
+	<Icon class="material-icons" slot="leadingIcon">forward_to_inbox</Icon>
+	<!-- <HelperText slot="helper">Send a clue in the form &lt;word number&gt;</HelperText> -->
+</Textfield>

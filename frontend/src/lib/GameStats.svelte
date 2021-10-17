@@ -15,11 +15,10 @@
 		<span class="red">{$state.red_agents}</span> - <span class="blue">{$state.blue_agents}</span>
 	</div>
 	<div class="container">
-		{whosTurn}
 		{#if whosTurn == "red"}
-			<span class="red">ROUND {$state.round}</span>
+			<span class="red">ROUND {$state.round + 1}</span>
 		{:else}
-			<span class="blue">ROUND {$state.round}</span>
+			<span class="blue">ROUND {$state.round + 1}</span>
 		{/if}
 		<!-- {#if $state.guesses > 0} -->
 		{#if $state.guesses > 0}
