@@ -2,7 +2,7 @@
 	import { page } from "$app/stores";
 	import { socket } from "../socket.js";
 	import { team, state, guesses } from "../stores.js";
-	import Snackbar, { SnackbarComponentDev } from "@smui/snackbar";
+	import Snackbar, { Actions, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
 	import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons } from "@smui/card";
 	import Button, { Label } from "@smui/button";
@@ -38,13 +38,10 @@
 	let noClueSnackbar: SnackbarComponentDev;
 	let yourSpymasterSnackbar: SnackbarComponentDev;
 	let wrongCardSnackbar: SnackbarComponentDev;
-
-	console.log($state.solution);
-	// console.log($state.solution.glow);
-
+	$: canMove =
+		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
 	function makeMove(card) {
-		let canMove =
-			($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
+		console.log("canMove", canMove);
 		if (!canMove) {
 			// red starts and take one at a time for now
 			console.log("its not your move");
@@ -57,7 +54,7 @@
 			switch ($state.solution[name]) {
 				case "B":
 					msg = "Oof, that's a blue agent, moving onto the next round";
-
+					break;
 				case "O":
 					msg = "Oof, that's a civilian, moving onto the next round";
 					break;
@@ -107,7 +104,7 @@
 </Snackbar>
 
 <Snackbar bind:this={wrongCardSnackbar} timeoutMs={4000}>
-	<Label>{msg}</Label>
+	<Label>{msg}??</Label>
 	<Actions>
 		<IconButton class="material-icons" title="Dismiss">close</IconButton>
 	</Actions>

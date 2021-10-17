@@ -5,7 +5,7 @@
 	import LinkGame from "./LinkGame.svelte";
 	import { Icon } from "@smui/button";
 
-	let whosTurn = $state.round % 2 == 0 ? "red" : "blue";
+	$: whosTurn = $state.round % 2 == 0 ? "red" : "blue";
 </script>
 
 <!-- guesses left: {guessesLeft} -->
@@ -46,6 +46,6 @@
 	}
 
 	.blue {
-		color: rgb(28, 28, 186);
+		color: #2767ff;
 	}
 </style>

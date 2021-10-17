@@ -9,6 +9,10 @@
 	let gameId = $page.params.id;
 	console.log("joined game");
 	// socket.emit("join", gameId);
+	socket.on("connection", function() {
+		console.log("reloading so reconnection")
+		socket.emit("join", gameId)
+	})
 </script>
 
 <h1>You joined as a spymaster</h1>

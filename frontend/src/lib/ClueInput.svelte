@@ -13,10 +13,10 @@
 	let notYourTurnSnackbar: SnackbarComponentDev;
 	let alreadySentClueSnackbar: SnackbarComponentDev;
 	console.log(prevClue, $state.current_clue, prevClue === $state.current_clue);
-	let canMove =
+	$: canMove =
 		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
 
-	console.log($state);
+	console.log("state inside clue input->", $state);
 	console.log("can move", canMove);
 	console.log("team is red", $team === "Red");
 	console.log("round even", $state.round % 2);
@@ -54,6 +54,8 @@
 </Snackbar>
 
 <div class="mx-4">
+	prev clue: {prevClue}
+	current clue: {$state.current_clue}
 	<input
 		class="round-lg"
 		type="text"

@@ -4,24 +4,26 @@
 	import Dialog, { Title, Content, Actions } from "@smui/dialog";
 	import { socket } from "../socket.js";
 	import Button, { Label } from "@smui/button";
-	import { state, guesses } from "../stores";
+	import { state } from "../stores";
 	import LayoutGrid, { Cell, InnerGrid } from "@smui/layout-grid";
 	import GameStats from "./GameStats.svelte";
 
 	export let spymaster = false;
 
-	let data;
-	let redCount;
-	let blueCount;
-	let agents = [];
-	let solution = [];
-	let gameId = $page.params.id;
 	let open = false;
-	let assassinated = false;
-	let clicked;
 	let winner;
 	let winningMsg;
-	let guessesLeft;
+	$: whoLost = $state.round % 2 != 0 ? "Red" : "Blue";
+
+	// let data;
+	// let redCount;
+	// let blueCount;
+	// let agents = [];
+	// let solution = [];
+	// let gameId = $page.params.id;
+	// let assassinated = false;
+	// let clicked;
+	// let guessesLeft;
 
 	// state.subscribe((stateData) => {
 	// 	if (Object.keys(stateData).length === 0) {
@@ -41,29 +43,30 @@
 	// });
 
 	socket.on("send-state", function (game) {
-		console.log("just got new game");
+		console.log("just got new state");
 		// console.log(game.current_clue);
 		console.log(game);
 		$state = game;
 	});
 
-	$: if (redCount == 0) {
+	$: if ($state.red_agents == 0) {
 		winner = "Red";
 		winningMsg = "Well done red team. Play again?";
 		open = true;
 	}
 
-	$: if (blueCount == 0) {
+	$: if ($state.blue_agents == 0) {
 		winner = "Blue";
 		winningMsg = "Well done blue team. Play again?";
 		open = true;
 	}
 
-	$: if (assassinated) {
+	$: if ($state.assassinated) {
 		winner = "Assassin";
-		winningMsg = "TODO: whatever team picked this lost";
+		winningMsg = `${whoLost} team found the assassin so they lose! Play again?`;
 		open = true;
 	}
+	console.log("state inside gameboard->", $state);
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -81,20 +84,18 @@
 </Dialog>
 
 <GameStats />
-{$state == {}}
-{$state}
 <div class="agentsGrid">
-	{#if spymaster && $state != {}}
-		{#each $state.solution as sol, i}
-			<AgentCard name={sol[0]} colour={sol[1]} num={i} spymaster={true} />
-		{/each}
-	{:else}
-		{#each $state.board as agent, i}
-			<AgentCard name={agent[0]} colour={agent[1]} num={i} spymaster={false} />
-		{/each}
+	{#if $state != {}}
+		{#if spymaster}
+			{#each Object.entries($state.solution) as [name, col], i}
+				<AgentCard {name} colour={col} num={i} spymaster={true} />
+			{/each}
+		{:else}
+			{#each Object.entries($state.board) as [name, col], i}
+				<AgentCard {name} colour={col} num={i} spymaster={false} />
+			{/each}
+		{/if}
 	{/if}
-
-	<!-- {state.board} -->
 </div>
 
 <style>

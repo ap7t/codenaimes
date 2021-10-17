@@ -9,6 +9,9 @@ team.subscribe((val) => browser && localStorage.setItem("team", val));
 export const username = writable(browser && localStorage.getItem("username") || "player")
 username.subscribe((val) => browser && localStorage.setItem("username", val));
 
+// export const state = writable(browser && localStorage.getItem("state") || {} )
+// state.subscribe((val) => browser && localStorage.setItem("state", val));
+
 export const state = writable({});
 
     

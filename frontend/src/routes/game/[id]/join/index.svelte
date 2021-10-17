@@ -29,14 +29,12 @@
 		}
 	}
 
-	socket.on("send-state", function (game) {
+	socket.on("before-join", function (game) {
+		console.log("got the game state before joining");
 		$state = game;
 		goto(`/game/${gameId}/player/${pt}`);
+		console.log($state);
 	});
-
-	function focusOnInput() {
-		open = false;
-	}
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -67,47 +65,31 @@
 </div>
 
 <div class="card-display">
-	<div class="card-container">
-		<Card>
-			<!-- <Content><h2>Spymaster</h2></Content>
+	<Card>
+		<!-- <Content><h2>Spymaster</h2></Content>
 			<Content>Description of what a spymaster does</Content> -->
-			<Actions fullBleed>
-				<Button on:click={() => handleSubmit("spymaster")}>
-					<Label>Join as Spymaster</Label>
-					<i class="material-icons" aria-hidden="true">arrow_forward</i>
-				</Button>
-			</Actions>
-		</Card>
-	</div>
+		<Actions fullBleed>
+			<Button on:click={() => handleSubmit("spymaster")}>
+				<Label>Join as Spymaster</Label>
+				<i class="material-icons" aria-hidden="true">arrow_forward</i>
+			</Button>
+		</Actions>
+	</Card>
 
-	<div class="card-container">
-		<Card>
-			<!-- <Content><h2>Operative</h2></Content>
+	<Card>
+		<!-- <Content><h2>Operative</h2></Content>
 			<Content>Description of what a operative does</Content> -->
-			<Actions fullBleed>
-				<Button on:click={() => handleSubmit("operative")}>
-					<Label>Join as Operative</Label>
-					<i class="material-icons" aria-hidden="true">arrow_forward</i>
-				</Button>
-			</Actions>
-		</Card>
-	</div>
+		<Actions fullBleed>
+			<Button on:click={() => handleSubmit("operative")}>
+				<Label>Join as Operative</Label>
+				<i class="material-icons" aria-hidden="true">arrow_forward</i>
+			</Button>
+		</Actions>
+	</Card>
 </div>
 
 <style>
-	/* * :global(.card-media-16x9) {
-		background-image: url(https://place-hold.it/320x180?text=16x9&fontsize=23);
+	div * {
+		padding: 20px;
 	}
-
-	* :global(.card-media-square) {
-		background-image: url(https://place-hold.it/320x320?text=square&fontsize=23);
-	}
-
-	div {
-		padding-top: 10px;
-	}
-
-	.radio-demo > :global(*) {
-		margin: 0 0.2em;
-	} */
 </style>

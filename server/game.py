@@ -40,8 +40,8 @@ DUMMY_WORDS = [
 ]
 
 class Game:
-    def __init__(self, gameId="dev"):
-        self.gameId = gameId
+    def __init__(self, id="dev"):
+        self.id = id
         self.start_colour = RED
         self.date_created = datetime.now()
         self.date_last_updated = self.date_created
@@ -50,7 +50,7 @@ class Game:
         self.total_guesses = 0
         self.guesses = 0
         self.teams = None
-        self.red_agents = AGENTS_PER_TEAM
+        self.red_agents = AGENTS_PER_TEAM + 1
         self.blue_agents = AGENTS_PER_TEAM
         self.assassinated = False
         self.board = None
@@ -61,10 +61,10 @@ class Game:
 
     def to_json(self):
         return {
-            "gameId": self.gameId,
+            "gameId": self.id,
             "start_colour": self.start_colour,
-            "board": list(self.board.items()),
-            "solution": list(self.solution.items()),
+            "board": self.board,
+            "solution": self.solution,
             "date_created": str(self.date_created),
             "date_last_updated": str(self.date_last_updated),
             "teams": self.teams,
