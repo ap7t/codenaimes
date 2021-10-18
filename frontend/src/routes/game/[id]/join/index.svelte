@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Card, { PrimaryAction, Actions, ActionButtons, ActionIcons } from "@smui/card";
 	import Button, { Label } from "@smui/button";
-	import Dialog, { Title, Content, Actions } from "@smui/dialog";
+	import Dialog, { Title, Content } from "@smui/dialog";
 	import Textfield from "@smui/textfield";
 	import HelperText from "@smui/textfield/helper-text/index";
 	import Radio from "@smui/radio";
@@ -10,18 +10,20 @@
 	import { state, username, team } from "../../../../stores";
 	import { page } from "$app/stores";
 	import { socket } from "../../../../socket";
+	import IconButton from "@smui/icon-button";
+	import User from "$lib/User.svelte";
+
 	let gameId = $page.params.id;
 
 	let name = "dev";
 	let redblue = "Red";
+	let role = "Operative";
 	let open = false;
-	let pt;
 
 	$: $username = name;
 	$: $team = redblue;
 
-	function handleSubmit(playerType) {
-		pt = playerType;
+	function handleSubmit() {
 		if (name === "") {
 			open = true;
 		} else {
@@ -30,10 +32,8 @@
 	}
 
 	socket.on("before-join", function (game) {
-		console.log("got the game state before joining");
 		$state = game;
-		goto(`/game/${gameId}/player/${pt}`);
-		console.log($state);
+		goto(`/game/${gameId}/player/${role.toLowerCase()}`);
 	});
 </script>
 
@@ -49,47 +49,43 @@
 </Dialog>
 <div>
 	<div>
-		<Textfield id="nameInput" variant="outlined" required={true} bind:value={name} label="Name">
+		<h2>1. Indentify yourself</h2>
+		<Textfield id="nameInput" required={true} bind:value={name} label="Name">
 			<HelperText slot="helper">Enter a name so you can be recognised by your team</HelperText>
 		</Textfield>
 	</div>
 	<div class="radio-demo">
-		<h3>Choose your team</h3>
+		<h2>2. Choose your team</h2>
 		{#each ["Red", "Blue"] as option}
 			<FormField>
 				<Radio bind:group={redblue} value={option} touch />
+				<span class={option == "Red" ? "red" : "blue"} slot="label">{option}</span>
+			</FormField>
+		{/each}
+	</div>
+	<div class="radio-demo">
+		<h2>3. Choose your role</h2>
+		{#each ["Spymaster", "Operative"] as option}
+			<FormField>
+				<Radio bind:group={role} value={option} touch />
 				<span slot="label">{option}</span>
 			</FormField>
 		{/each}
 	</div>
-</div>
-
-<div class="card-display">
-	<Card>
-		<!-- <Content><h2>Spymaster</h2></Content>
-			<Content>Description of what a spymaster does</Content> -->
-		<Actions fullBleed>
-			<Button on:click={() => handleSubmit("spymaster")}>
-				<Label>Join as Spymaster</Label>
-				<i class="material-icons" aria-hidden="true">arrow_forward</i>
+	<div>
+		<h2>4. Play</h2>
+		<div>
+			<User username={$username} team={redblue.toLowerCase()} role={role.toLowerCase()} />
+			<Button variant="raised" class="red" on:click={handleSubmit}>
+				<Label>Join as {role}</Label>
 			</Button>
-		</Actions>
-	</Card>
-
-	<Card>
-		<!-- <Content><h2>Operative</h2></Content>
-			<Content>Description of what a operative does</Content> -->
-		<Actions fullBleed>
-			<Button on:click={() => handleSubmit("operative")}>
-				<Label>Join as Operative</Label>
-				<i class="material-icons" aria-hidden="true">arrow_forward</i>
-			</Button>
-		</Actions>
-	</Card>
+		</div>
+	</div>
 </div>
 
 <style>
-	div * {
-		padding: 20px;
+	h2 + div {
+		display: flex;
+		justify-content: space-evenly;
 	}
 </style>

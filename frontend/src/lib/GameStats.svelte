@@ -10,23 +10,28 @@
 
 <!-- guesses left: {guessesLeft} -->
 <div class="container">
-	<div class="agentsRemaining">
-		<Icon class="material-icons">sports_score</Icon>
-		<span class="red">{$state.red_agents}</span> - <span class="blue">{$state.blue_agents}</span>
-	</div>
-	<div class="container">
+	<div class="round">
 		{#if whosTurn == "red"}
 			<span class="red">ROUND {$state.round + 1}</span>
 		{:else}
 			<span class="blue">ROUND {$state.round + 1}</span>
 		{/if}
-		<!-- {#if $state.guesses > 0} -->
+	</div>
+	<div class="middleBar">
+		<div>
+			<Icon class="material-icons">sports_score</Icon>
+			<span class="red">{$state.red_agents}</span> -
+			<span class="blue">{$state.blue_agents}</span>
+		</div>
+
+		<LinkGame />
+	</div>
+	<div class="guesses">
 		{#if $state.guesses > 0}
-			<Icon class="material-icons">person_search</Icon>
+			<Icon class="material-icons">contact_support</Icon>
 			{$state.guesses} guesses left
 		{/if}
 	</div>
-	<div><LinkGame /></div>
 </div>
 
 <style>
@@ -36,8 +41,27 @@
 
 	.container {
 		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.middleBar {
+		height: 100%;
+		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
+	}
+
+	.guesses {
+		display: flex;
+		flex-direction: row;
+		justify-content: left;
+	}
+
+	.round {
+		display: flex;
+		justify-content: center;
+		width: 100%;
 	}
 
 	.red {

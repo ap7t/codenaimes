@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { socket } from "../socket.js";
-	import { team, state, guesses } from "../stores.js";
+	import { team, state } from "../stores.js";
 	import Snackbar, { Actions, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
-	import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons } from "@smui/card";
+	import Card, { Content, PrimaryAction, ActionButtons, ActionIcons } from "@smui/card";
 	import Button, { Label } from "@smui/button";
 
-	export let name = "teest";
-	export let num;
 	export let colour;
 	export let spymaster;
+	export let name;
 	let msg;
 
 	let classString = "agentCard";
@@ -41,10 +40,7 @@
 	$: canMove =
 		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
 	function makeMove(card) {
-		console.log("canMove", canMove);
 		if (!canMove) {
-			// red starts and take one at a time for now
-			console.log("its not your move");
 			notYourTurnSnackbar.open();
 		} else if (spymaster) {
 			yourSpymasterSnackbar.open();
@@ -75,7 +71,6 @@
 			let data = { card: card, gameId: gameId, correct: false };
 			socket.emit("make_move", data);
 		} else {
-			console.log("making move");
 			let data = { card: card, gameId: gameId, correct: true };
 			socket.emit("make_move", data);
 		}
@@ -104,7 +99,7 @@
 </Snackbar>
 
 <Snackbar bind:this={wrongCardSnackbar} timeoutMs={4000}>
-	<Label>{msg}??</Label>
+	<Label>{msg}</Label>
 	<Actions>
 		<IconButton class="material-icons" title="Dismiss">close</IconButton>
 	</Actions>
@@ -112,6 +107,10 @@
 
 <Card>
 	<PrimaryAction on:click={() => makeMove({ name })} padded class={classString}>
-		{name}
+		{#if spymaster && $state.board[name]}
+			<strike>{name}</strike>
+		{:else}
+			{name}
+		{/if}
 	</PrimaryAction>
 </Card>

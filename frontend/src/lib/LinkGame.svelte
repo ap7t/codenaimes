@@ -7,15 +7,28 @@
 
 	let gameLink;
 	let gameId = $page.params.id;
+	let text = "Copy";
 	onMount(() => {
 		gameLink = `${window.location.origin}/game/${gameId}/join`;
 	});
-	console.log(gameLink);
 
-	function copyLink() {
-		console.log("copied to clipboard");
-		linkCopied.open();
+	function sleep(ms) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
+
+	async function copyLink() {
+		linkCopied.open();
+		let dummy = document.createElement("textarea");
+		document.body.appendChild(dummy);
+		dummy.value = gameLink;
+		dummy.select();
+		document.execCommand("copy");
+		document.body.removeChild(dummy);
+		text = "Copied";
+		await sleep(2000);
+		text = "Copy";
+	}
+
 	let linkCopied: SnackbarComponentDev;
 </script>
 
@@ -27,5 +40,5 @@
 </Snackbar>
 <Button on:click={copyLink} variant="outlined">
 	<Icon class="material-icons">content_copy</Icon>
-	<Label>Copy game link</Label>
+	<Label>{text} game link</Label>
 </Button>

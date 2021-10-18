@@ -1,7 +1,10 @@
 <script>
 	import GameBoard from "$lib/GameBoard.svelte";
-	import CommsArea from "$lib/CommsArea.svelte";
+	import Main from "$lib/Main.svelte";
+	import GameStats from "$lib/GameStats.svelte";
 </script>
 
-<GameBoard spymaster={true} />
-<CommsArea spymaster={true} />
+<Main spymaster={true} />
+
+<style>
+</style>

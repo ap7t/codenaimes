@@ -17,11 +17,17 @@ body {
   color: theme.$on-surface;
 }
 
-a {
-  color: #40b3ff;
+strong {
+  color: theme.$primary;
 }
-a:visited {
-  color: color.scale(#40b3ff, $lightness: -35%);
+
+a {
+  color: theme.$primary;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .redAgent {
@@ -29,6 +35,14 @@ a:visited {
   
 }
 
+.red {
+  color: rgb(199, 45, 45);
+  
+}
+
+.blue {
+  color:#2767ff;
+}
 
 .blueAgent {
   background-color:#2767ff;
@@ -46,4 +60,8 @@ a:visited {
   text-transform: uppercase;
   padding: 50px;
   text-align: center;
+}
+
+nav { 
+  border-bottom: 1px solid theme.$primary;
 }

@@ -8,10 +8,6 @@
 
 	let gameId = $page.params.id;
 
-	// socket.on("connect", function () {
-	// 	socket.emit("join", gameId);
-	// });
-
 	socket.on("send-clue", function (clue) {
 		clues = [...clues, clue];
 		let objDiv = document.getElementById("clues");
@@ -23,7 +19,7 @@
 	<h1>Clues</h1>
 	<div id="clues">
 		{#each clues as clue, i}
-			<p class={i % 2 == 0 ? "red" : "blue"}>{clue}</p>
+			<p in:fade class={i % 2 == 0 ? "red" : "blue"}>{clue}</p>
 		{/each}
 	</div>
 </div>

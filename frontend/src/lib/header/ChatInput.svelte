@@ -18,10 +18,7 @@
 
 	$: canMove =
 		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
-
-	const onInput = (event) => {
-		if (event.key !== "Enter") {
-			return;
+	socket.on("message", function (data) {
 		} else if (!canMove) {
 			notYourTurnSnackbar.open();
 			return;

@@ -16,9 +16,6 @@
 	$: whoLost = $state.round % 2 != 0 ? "Red" : "Blue";
 
 	socket.on("send-state", function (game) {
-		console.log("just got new state");
-		// console.log(game.current_clue);
-		console.log(game);
 		$state = game;
 	});
 
@@ -39,7 +36,6 @@
 		winningMsg = `${whoLost} team found the assassin so they lose! Play again?`;
 		open = true;
 	}
-	console.log("state inside gameboard->", $state);
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -56,16 +52,15 @@
 	</Actions>
 </Dialog>
 
-<GameStats />
 <div class="agentsGrid">
 	{#if $state != {}}
 		{#if spymaster}
-			{#each Object.entries($state.solution) as [name, col], i}
-				<AgentCard {name} colour={col} num={i} spymaster={true} />
+			{#each Object.entries($state.solution) as [name, col], _}
+				<AgentCard {name} colour={col} spymaster={true} />
 			{/each}
-		{:else}
-			{#each Object.entries($state.board) as [name, col], i}
-				<AgentCard {name} colour={col} num={i} spymaster={false} />
+		{:else} 
+			{#each Object.entries($state.board) as [name, col], _}
+				<AgentCard {name} colour={col} spymaster={false} />
 			{/each}
 		{/if}
 	{/if}
@@ -84,5 +79,8 @@
 
 		/* Add a 10px gap between columns and rows */
 		grid-gap: 10px;
+
+		width: 100%;
+		min-width: 20%;
 	}
 </style>

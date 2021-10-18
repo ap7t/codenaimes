@@ -1,7 +1,14 @@
 <script>
-	import GameBoard from "$lib/GameBoard.svelte";
-	import CommsArea from "$lib/CommsArea.svelte";
+	import Main from "$lib/Main.svelte";
+	import GameStats from "$lib/GameStats.svelte";
 </script>
 
-<GameBoard />
-<CommsArea />
+<Main />
+
+<style>
+	.general {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+</style>

@@ -10,7 +10,6 @@
 
 	function createGame() {
 		socket.emit("create_game", gameId);
-		console.log("created game");
 		goto(`/game/${gameId}/join`);
 	}
 </script>
@@ -19,7 +18,8 @@
 	<title>Start</title>
 </svelte:head>
 
-<div in:fade class="w-full max-w-xs">
+<div in:fade>
+	<h3>3. Create a Game ID</h3>
 	<Textfield id="gameId" variant="outlined" required={true} bind:value={gameId} label="Game ID">
 		<HelperText slot="helper"
 			>Enter a word that will be used as the Game ID so your friends can join</HelperText
