@@ -1,6 +1,5 @@
 <script>
 	import Header from "$lib/header/Header.svelte";
-	// import "../app.postcss";
 </script>
 
 <Header />
@@ -9,7 +8,7 @@
 </main>
 
 <footer>
-	<p>Hacked together by Adam Purcell 2021 &copy;</p>
+	<p>Hacked together by <a href="https://github.com/ap7t">Adam Purcell</a> 2021 &copy;</p>
 </footer>
 
 <style>
@@ -17,11 +16,14 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		padding: 1rem;
 		width: 100%;
-		max-width: 1024px;
+		height: 100%;
+		max-width: 2048px;
 		margin: 0 auto;
 		box-sizing: border-box;
+		font-family: "Roboto";
 	}
 
 	footer {
@@ -30,6 +32,7 @@
 		justify-content: center;
 		align-items: center;
 		padding: 40px;
+		font-family: "Roboto";
 	}
 
 	footer a {

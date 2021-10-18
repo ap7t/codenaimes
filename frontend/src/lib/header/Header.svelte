@@ -1,122 +1,68 @@
-<script>
-	import { page } from '$app/stores';
-	import logo from './github-logo.svg';
+<script lang="ts">
+	import Drawer, { AppContent, Content, Header, Title, Subtitle } from "@smui/drawer";
+	import Button, { Label, Icon } from "@smui/button";
+	import List, { Item, Text } from "@smui/list";
+	import { goto } from "$app/navigation";
+
+	let open = false;
+	let active = "Gray Kittens";
+
+	function setActive(value: string) {
+		active = value;
+	}
 </script>
 
-<header>
-	<div class="corner">
-		<a href="https://github.com/ap7t">
-			<img src={logo} alt="Github Logo" />
-		</a>
-	</div>
-
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li class:active={$page.path === '/'}><a sveltekit:prefetch href="/">Home</a></li>
-			<li class:active={$page.path === '/about'}><a sveltekit:prefetch href="/about">About</a></li>
-			<li class:active={$page.path === '/game/'}>
-				<a sveltekit:prefetch href="/game/">Play</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-
-	<div class="corner">
-		<!-- TODO put something else here? github link? -->
-	</div>
-</header>
+<nav>
+	<label class="logo" on:click={() => goto("/")}>coden<strong>ai</strong>mes</label>
+	<ul>
+		<li>
+			<Button on:click={() => goto("/")}>
+				<Icon class="material-icons">home</Icon>
+				<Label>Home</Label>
+			</Button>
+		</li>
+		<li>
+			<Button on:click={() => goto("/game")}>
+				<Icon class="material-icons">sports_esports</Icon>
+				<Label>Play</Label>
+			</Button>
+		</li>
+		<li>
+			<Button on:click={() => goto("/about")}>
+				<Icon class="material-icons">info</Icon>
+				<Label>About</Label>
+			</Button>
+		</li>
+	</ul>
+</nav>
 
 <style>
-	header {
-		display: flex;
-		justify-content: space-between;
+	* {
+		font-family: "Roboto";
 	}
-
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
-
-	.corner a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-
 	nav {
 		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
-	}
-
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
+		flex-direction: row;
+		justify-content: space-between;
 		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
+		height: 60px;
+		max-width: 100%;
 	}
-
-	li {
-		position: relative;
-		height: 100%;
+	label.logo {
+		font-size: 35px;
+		font-weight: bold;
+		line-height: 60px;
+		margin-left: 40px;
 	}
-
-	li.active::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--accent-color);
-	}
-
-	nav a {
+	nav ul {
+		/* float: right; */
 		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 1em;
-		color: var(--heading-color);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
+		flex-direction: row;
+		margin-right: 50px;
 	}
-
-	a:hover {
-		color: var(--accent-color);
+	nav ul li {
+		display: inline-block;
+		line-height: 60px;
+		margin: 0px 20px;
 	}
 </style>

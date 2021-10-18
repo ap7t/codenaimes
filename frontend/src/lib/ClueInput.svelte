@@ -1,27 +1,57 @@
-<script>
+<script lang="ts">
 	import { page } from "$app/stores";
-	import { io } from "socket.io-client";
+	import { socket } from "../socket.js";
+	import { team, state } from "../stores";
+	import Snackbar, { Actions, Label, SnackbarComponentDev } from "@smui/snackbar";
+	import IconButton from "@smui/icon-button";
+	import Textfield from "@smui/textfield";
+	import HelperText from "@smui/textfield/helper-text/index";
+	import Icon from "@smui/textfield/icon";
 
-	let clue;
+	let prevClue = ""; 
+	let clue = "dev 4";
+	let guesses;
 	let gameId = $page.params.id;
 
-	const socket = io("http://localhost:5000");
+	let notYourTurnSnackbar: SnackbarComponentDev;
+	let alreadySentClueSnackbar: SnackbarComponentDev;
+
+	$: canMove =
+		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
 
 	const onInput = (event) => {
-		console.log("func called");
-		if (event.key !== "Enter") return;
-		let data = { clue: clue, gameId: gameId };
+		if (event.key !== "Enter") {
+			return;
+		} else if (!canMove) {
+			notYourTurnSnackbar.open();
+			return;
+		} else if (prevClue === $state.current_clue) {
+			alreadySentClueSnackbar.open();
+			return;
+		}
+		guesses = parseInt(clue.split(" ")[1]);
+		let data = { clue: clue, guesses: guesses, gameId: gameId };
 		socket.emit("send-clue", data);
+		prevClue = clue;
 		clue = "";
 	};
 </script>
 
-<div class="mx-4">
-	<input
-		class="round-lg"
-		type="text"
-		placeholder="Send clues"
-		bind:value={clue}
-		on:keydown={onInput}
-	/>
-</div>
+<Snackbar bind:this={alreadySentClueSnackbar} timeoutMs={4000}>
+	<Label>You already sent your clue for this round!</Label>
+	<Actions>
+		<IconButton class="material-icons" title="Dismiss">close</IconButton>
+	</Actions>
+</Snackbar>
+
+<Snackbar bind:this={notYourTurnSnackbar} timeoutMs={4000}>
+	<Label>Hold your horses, it's not your turn!</Label>
+	<Actions>
+		<IconButton class="material-icons" title="Dismiss">close</IconButton>
+	</Actions>
+</Snackbar>
+
+<Textfield variant="outlined" bind:value={clue} label="Clue" on:keydown={onInput}>
+	<Icon class="material-icons" slot="leadingIcon">forward_to_inbox</Icon>
+	<!-- <HelperText slot="helper">Send a clue in the form &lt;word number&gt;</HelperText> -->
+</Textfield>

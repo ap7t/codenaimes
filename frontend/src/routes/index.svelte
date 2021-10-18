@@ -1,9 +1,10 @@
-<script context="module">
+<script lang="ts">
 	export const prerender = true;
-</script>
+	import Button, { Label } from "@smui/button";
+	import List, { Item, Text } from "@smui/list";
+	import { goto } from "$app/navigation";
 
-<script>
-	import { fade, fly } from "svelte/transition";
+	import { fade } from "svelte/transition";
 </script>
 
 <svelte:head>
@@ -11,37 +12,40 @@
 </svelte:head>
 
 <section in:fade>
-	<h1>
-		Coden<strong>ai</strong>mes
-	</h1>
-	<p>It's Codenames, but with AI</p>
+	<p>
+		<a href="https://en.wikipedia.org/wiki/Codenames_(board_game)" target="_blank">Codenames</a> is a
+		fun and enjoyable board game to play with your friends - but what if you don't have any friends?
+	</p>
+	<p>
+		Well, modern problems require modern solutions, so look no further as now you can play with <strong
+			>AI</strong
+		>!
+	</p>
 </section>
+<Button variant="raised" on:click={() => goto("/game")}>
+	<Label>It's gaming time</Label>
+</Button>
 
 <style>
 	section {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+		align-items: right;
 		flex: 1;
+		width: 60%;
+		margin-top: 5em;
 	}
 
-	h1 {
-		width: 100%;
+	section > p {
+		font-size: 2rem;
 	}
 
-	.welcome {
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
+	p + p {
+		font-size: large;
+		margin-bottom: 5rem;
 	}
 
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
+	a {
+		font-size: 3rem;
 	}
 </style>

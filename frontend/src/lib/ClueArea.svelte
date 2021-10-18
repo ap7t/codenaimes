@@ -1,5 +1,5 @@
 <script>
-	import { io } from "socket.io-client";
+	import { socket } from "../socket.js";
 	import { page } from "$app/stores";
 	import { fade } from "svelte/transition";
 
@@ -8,23 +8,59 @@
 
 	let gameId = $page.params.id;
 
-	const socket = io("http://localhost:5000");
-
-	socket.on("connect", function () {
-		socket.emit("join", gameId);
-	});
-
 	socket.on("send-clue", function (clue) {
 		clues = [...clues, clue];
-		console.log(clues);
+		let objDiv = document.getElementById("clues");
+		objDiv.scrollTop = objDiv.scrollHeight;
 	});
 </script>
 
-<div class="border-2">
-	<h4>Clues from Spymaster</h4>
-	<ul id="clues" class="border-2 border-black-700">
-		{#each clues as clue}
-			<li in:fade class="list-none">{clue}</li>
+<div class="scrollHider">
+	<h1>Clues</h1>
+	<div id="clues">
+		{#each clues as clue, i}
+			<p in:fade class={i % 2 == 0 ? "red" : "blue"}>{clue}</p>
 		{/each}
-	</ul>
+	</div>
 </div>
+
+<style>
+	.scrollHider {
+		width: 100%;
+		height: 200px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	#clues {
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+		box-sizing: content-box; /* So the width will be 100% + 17px */
+		margin-left: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	p {
+		border: 2px solid #dedede;
+		background-color: #f1f1f1;
+		border-radius: 5px;
+		padding: 10px;
+		margin: 10px 0;
+		text-transform: uppercase;
+		/* width: auto; */
+	}
+
+	.red {
+		color: rgb(199, 45, 45);
+	}
+
+	.blue {
+		color: #2767ff;
+	}
+</style>

@@ -1,12 +1,10 @@
 <script>
-	import ClueInput from "$lib/ClueInput.svelte";
-
 	import GameBoard from "$lib/GameBoard.svelte";
-	import LinkGame from "$lib/LinkGame.svelte";
+	import Main from "$lib/Main.svelte";
+	import GameStats from "$lib/GameStats.svelte";
 </script>
 
-<h1>You joined as a spymaster</h1>
-<!-- can probably do this better as operative and spymaster screens will have the same layout for the top -->
-<LinkGame />
-<ClueInput />
-<GameBoard spymaster="true" />
+<Main spymaster={true} />
+
+<style>
+</style>

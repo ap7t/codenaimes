@@ -1,13 +1,14 @@
 <script>
-	import ChatArea from "$lib/ChatArea.svelte";
-	import ClueArea from "$lib/ClueArea.svelte";
-	import GameBoard from "$lib/GameBoard.svelte";
-	import LinkGame from "$lib/LinkGame.svelte";
+	import Main from "$lib/Main.svelte";
+	import GameStats from "$lib/GameStats.svelte";
 </script>
 
-<h1>You joined as a operative</h1>
-<LinkGame />
-<ClueArea />
-<ChatArea />
+<Main />
 
-<GameBoard />
+<style>
+	.general {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+</style>
