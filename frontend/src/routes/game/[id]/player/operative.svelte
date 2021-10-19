@@ -1,10 +1,9 @@
 <script>
-	import Main from "$lib/Main.svelte";
+	import PlayArea from "$lib/PlayArea.svelte";
 	import GameStats from "$lib/GameStats.svelte";
 </script>
 
-<Main />
-
+<PlayArea />
 <style>
 	.general {
 		display: flex;

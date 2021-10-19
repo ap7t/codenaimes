@@ -1,5 +1,11 @@
 <script>
-	import GameStats from "$lib/GameStats.svelte";
+	let rand = -1;
+	function getRand() {
+		fetch("./rand")
+			.then((d) => d.text())
+			.then((d) => (rand = d));
+	}
 </script>
 
-<GameStats />
+<h1>Your number is {rand}!</h1>
+<button on:click={getRand}>Get a random number</button>
