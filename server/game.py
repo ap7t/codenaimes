@@ -11,33 +11,8 @@ AGENTS_PER_TEAM = 8
 TOTAL_ASSASSINS = 1
 TOTAL_CIVLIANS = TOTAL_PLAYERS - (AGENTS_PER_TEAM * 2 + 1 + TOTAL_ASSASSINS)
 
-DUMMY_WORDS = [	
-    "resonant",
-    "tangy",
-    "moldy",
-    "powerful",
-    "dad",
-    "sweater",
-    "experience",
-    "tart",
-    "island",
-    "sneaky",
-    "church",
-    "modern",
-    "pipe",
-    "hospital",
-    "examine",
-    "efficient",
-    "twist",
-    "thank",
-    "scrub",
-    "crook",
-    "clover",
-    "assorted",
-    "foregoing",
-    "embarrassed",
-    "glow"
-]
+with open("agents.txt", "r") as f:
+    agents = f.read().split("\n")
 
 class Game:
     def __init__(self, id="dev"):
@@ -89,8 +64,8 @@ class Game:
 
 
     def generate_words(self):
-        shuffle(DUMMY_WORDS)
-        return DUMMY_WORDS
+        shuffle(agents)
+        return agents[:TOTAL_PLAYERS]
     
     def generate_positions(self):
         # TODO: not always red starting
