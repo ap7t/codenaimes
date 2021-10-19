@@ -106,11 +106,11 @@
 </Snackbar>
 
 <Card>
-	<PrimaryAction on:click={() => makeMove({ name })} padded class={classString}>
-		{#if spymaster && $state.board[name]}
-			<strike>{name}</strike>
-		{:else}
-			{name}
-		{/if}
+	<PrimaryAction
+		on:click={() => makeMove({ name })}
+		padded
+		class={spymaster && $state.board[name] ? classString + " found" : classString}
+	>
+		{name}
 	</PrimaryAction>
 </Card>

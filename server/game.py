@@ -12,8 +12,9 @@ TOTAL_ASSASSINS = 1
 TOTAL_CIVLIANS = TOTAL_PLAYERS - (AGENTS_PER_TEAM * 2 + 1 + TOTAL_ASSASSINS)
 
 with open("agents.txt", "r") as f:
-    agents = f.read().split("\n").pop() # newline in file is empty string
+    agents = f.read().split("\n")
 
+agents.pop()
 class Game:
     def __init__(self, id="dev"):
         self.id = id
@@ -64,7 +65,7 @@ class Game:
 
 
     def generate_words(self):
-        shuffle(agents)
+        shuffle(agents) # newline in file is empty string
         return agents[:TOTAL_PLAYERS]
     
     def generate_positions(self):

@@ -12,7 +12,7 @@
 	<div class="side">
 		<ClueArea />
 		<!-- {#if spymaster} -->
-		<ClueInput />
+		<ClueInput {spymaster} />
 		<!-- {/if} -->
 	</div>
 	<div class="game">

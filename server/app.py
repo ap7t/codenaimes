@@ -46,9 +46,9 @@ def clue_sent(data):
     clue = data["clue"]
     game.set_guesses(data["guesses"]) 
     game.current_clue = clue
-
+    print("game:", game.board)
     emit("send-state", game.to_json(), room=data["gameId"])
-    emit("send-clue", clue, room=data["gameId"])
+    emit("send-clue", data, room=data["gameId"])
 
 @socket.on("create_game")
 def create_game(gameId):
@@ -62,7 +62,7 @@ def join(data):
     game_id = data
     join_room(game_id)
     game = ROOMS[game_id]
-    print(f"got game {game.id}")
+    print(f"got game {game.board}")
     # get the game that is associated with the room here
     emit("before-join", game.to_json(), room=game_id)
 

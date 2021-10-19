@@ -12,6 +12,7 @@
 		clues = [...clues, clue];
 		let objDiv = document.getElementById("clues");
 		objDiv.scrollTop = objDiv.scrollHeight;
+		console.log(clues);
 	});
 </script>
 
@@ -19,7 +20,7 @@
 	<h1>Clues</h1>
 	<div id="clues">
 		{#each clues as clue, i}
-			<p in:fade class={i % 2 == 0 ? "red" : "blue"}>{clue}</p>
+			<p in:fade class={clue.team.toLowerCase()}>{clue.clue}</p>
 		{/each}
 	</div>
 </div>

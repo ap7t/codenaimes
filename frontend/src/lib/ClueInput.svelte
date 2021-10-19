@@ -8,10 +8,11 @@
 	import HelperText from "@smui/textfield/helper-text/index";
 	import Icon from "@smui/textfield/icon";
 
-	let prevClue = ""; 
+	let prevClue = "";
 	let clue = "dev 4";
 	let guesses;
 	let gameId = $page.params.id;
+	export let spymaster = false;
 
 	let notYourTurnSnackbar: SnackbarComponentDev;
 	let alreadySentClueSnackbar: SnackbarComponentDev;
@@ -30,7 +31,7 @@
 			return;
 		}
 		guesses = parseInt(clue.split(" ")[1]);
-		let data = { clue: clue, guesses: guesses, gameId: gameId };
+		let data = { clue: clue, guesses: guesses, gameId: gameId, team: $team };
 		socket.emit("send-clue", data);
 		prevClue = clue;
 		clue = "";
@@ -50,8 +51,9 @@
 		<IconButton class="material-icons" title="Dismiss">close</IconButton>
 	</Actions>
 </Snackbar>
-
-<Textfield variant="outlined" bind:value={clue} label="Clue" on:keydown={onInput}>
-	<Icon class="material-icons" slot="leadingIcon">forward_to_inbox</Icon>
-	<!-- <HelperText slot="helper">Send a clue in the form &lt;word number&gt;</HelperText> -->
-</Textfield>
+{#if spymaster}
+	<Textfield variant="outlined" bind:value={clue} label="Clue" on:keydown={onInput}>
+		<Icon class="material-icons" slot="leadingIcon">forward_to_inbox</Icon>
+		<!-- <HelperText slot="helper">Send a clue in the form &lt;word number&gt;</HelperText> -->
+	</Textfield>
+{/if}
