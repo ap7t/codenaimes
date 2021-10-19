@@ -87,5 +87,6 @@
 	h2 + div {
 		display: flex;
 		justify-content: space-evenly;
+		flex-direction: row-reverse;
 	}
 </style>
