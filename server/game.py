@@ -92,6 +92,7 @@ class Game:
         elif self.solution[word] == ASSASSIN and not self.board[word]:
             self.assassinated = True
         self.board[word] = self.solution[word]
+        print(self.board[word])
         # TODO: make rounds more than just one guess
     
     def decrement_guesses(self):
