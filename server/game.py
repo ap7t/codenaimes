@@ -12,7 +12,7 @@ TOTAL_ASSASSINS = 1
 TOTAL_CIVLIANS = TOTAL_PLAYERS - (AGENTS_PER_TEAM * 2 + 1 + TOTAL_ASSASSINS)
 
 with open("agents.txt", "r") as f:
-    agents = f.read().split("\n")
+    agents = f.read().split("\n").pop() # newline in file is empty string
 
 class Game:
     def __init__(self, id="dev"):
