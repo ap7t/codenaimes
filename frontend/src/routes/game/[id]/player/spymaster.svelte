@@ -1,10 +1,10 @@
 <script>
 	import GameBoard from "$lib/GameBoard.svelte";
-	import Main from "$lib/Main.svelte";
+	import PlayArea from "$lib/PlayArea.svelte";
 	import GameStats from "$lib/GameStats.svelte";
 </script>
 
-<Main spymaster={true} />
+<PlayArea spymaster={true} />
 
 <style>
 </style>

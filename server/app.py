@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit, send, join_room
 from datetime import datetime
 import time
 from game import Game
+import random
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "changeme"
@@ -11,9 +12,14 @@ socket = SocketIO(app, cors_allowed_origins="*")
 ACTIVE_USERS = -1 # app counts as a connection???
 ROOMS = {}
 
+@app.route("/rand")
+def rand():
+    return str(random.randint(0, 100))
+
 @app.route('/')
 def hello():
-    return render_template("index.html")
+    return str(random.randint(0, 100))
+    # return render_template("index.html")
 
 @socket.on("message")
 def message(data):
@@ -78,4 +84,4 @@ def make_move(data):
         emit("send-state", game.to_json(), room=data["gameId"])
 
 if __name__ == "__main__":
-    socket.run(app, debug=True)
+    socket.run(app, host='0.0.0.0', port=5000, debug=True)

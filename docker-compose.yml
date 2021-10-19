@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  flask:
+    build: server
+    image: ap7t/codenaimes-flask
+    restart: always
+    container_name: flask
+    volumes:
+      - ./server:/app
+    ports:
+      - 5000:5000
+    networks:
+      - bridge
+
+  sveltekit:
+    build: frontend 
+    image: ap7t/codenaimes-sveltekit
+    restart: always
+    container_name: sveltekit
+    ports:
+      - 3000:3000
+    networks:
+      - bridge
+
+networks:
+  bridge:
