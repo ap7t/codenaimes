@@ -17,7 +17,6 @@
 	}
 
 	async function copyLink() {
-		linkCopied.open();
 		let dummy = document.createElement("textarea");
 		document.body.appendChild(dummy);
 		dummy.value = gameLink;
@@ -28,16 +27,8 @@
 		await sleep(2000);
 		text = "Copy";
 	}
-
-	let linkCopied: SnackbarComponentDev;
 </script>
 
-<Snackbar bind:this={linkCopied} timeoutMs={4000}>
-	<Label>Link copied to clipboard!</Label>
-	<Actions>
-		<IconButton class="material-icons" title="Dismiss">close</IconButton>
-	</Actions>
-</Snackbar>
 <Button on:click={copyLink} variant="outlined">
 	<Icon class="material-icons">content_copy</Icon>
 	<Label>{text} game link</Label>
