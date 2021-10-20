@@ -19,7 +19,7 @@
 </svelte:head>
 
 <div in:fade>
-	<h3>3. Create a Game ID</h3>
+	<h3>Create a Game ID</h3>
 	<Textfield id="gameId" variant="outlined" required={true} bind:value={gameId} label="Game ID">
 		<HelperText slot="helper"
 			>Enter a word that will be used as the Game ID so your friends can join</HelperText
