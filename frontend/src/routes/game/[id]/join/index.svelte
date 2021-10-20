@@ -49,7 +49,7 @@
 </Dialog>
 <div>
 	<div>
-		<h2>1. Indentify yourself</h2>
+		<h2>1. Identify yourself</h2>
 		<Textfield id="nameInput" required={true} bind:value={name} label="Name">
 			<HelperText slot="helper">Enter a name so you can be recognised by your team</HelperText>
 		</Textfield>
