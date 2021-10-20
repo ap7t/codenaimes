@@ -14,12 +14,10 @@
 <section in:fade>
 	<p>
 		<a href="https://en.wikipedia.org/wiki/Codenames_(board_game)" target="_blank">Codenames</a> is a
-		fun and enjoyable board game to play with your friends - but what if you don't have any friends?
+		great board game to play with your friends - but what if you don't have any friends?
 	</p>
 	<p>
-		Well, modern problems require modern solutions, so look no further as now you can play with <strong
-			>AI</strong
-		>!
+		Modern problems require modern solutions. Play with <strong>AI</strong>
 	</p>
 </section>
 <Button variant="raised" on:click={() => goto("/game")}>

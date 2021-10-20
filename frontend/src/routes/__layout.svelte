@@ -8,7 +8,7 @@
 </main>
 
 <footer>
-	<p>Hacked together by <a href="https://github.com/ap7t">Adam Purcell</a> 2021 &copy;</p>
+	<p> <a href="https://github.com/ap7t">Adam Purcell</a> 2021 &copy;</p>
 </footer>
 
 <style>
