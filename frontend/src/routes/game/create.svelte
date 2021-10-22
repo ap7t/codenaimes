@@ -5,18 +5,40 @@
 	import { goto } from "$app/navigation";
 	import Textfield from "@smui/textfield";
 	import HelperText from "@smui/textfield/helper-text/index";
+	import Dialog, { Title, Content, Actions } from "@smui/dialog";
 
 	let gameId = "dev";
+	let open = false;
 
 	function createGame() {
 		socket.emit("create_game", gameId);
-		goto(`/game/${gameId}/join`);
 	}
+
+	socket.on("cant_create", function () {
+		open = true;
+	});
+
+	socket.on("create_game", function () {
+		goto(`/game/${gameId}/join`);
+	});
 </script>
 
 <svelte:head>
 	<title>Start</title>
 </svelte:head>
+
+<Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
+	<!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+	<Title id="simple-title">Game Already Exists</Title>
+	<Content id="simple-content"
+		>Looks like someone is already using that Game ID, please use a different one</Content
+	>
+	<Actions>
+		<Button>
+			<Label>Will do</Label>
+		</Button>
+	</Actions>
+</Dialog>
 
 <div in:fade>
 	<h3>Create a Game ID</h3>

@@ -23,18 +23,21 @@
 		winner = "Red";
 		winningMsg = "Well done red team. Play again?";
 		open = true;
+		socket.emit("game-over", $state.gameId);
 	}
 
 	$: if ($state.blue_agents == 0) {
 		winner = "Blue";
 		winningMsg = "Well done blue team. Play again?";
 		open = true;
+		socket.emit("game-over", $state.gameId);
 	}
 
 	$: if ($state.assassinated) {
 		winner = "Assassin";
 		winningMsg = `${whoLost} team found the assassin so they lose! Play again?`;
 		open = true;
+		socket.emit("game-over", $state.gameId);
 	}
 </script>
 
@@ -58,7 +61,7 @@
 			{#each Object.entries($state.solution) as [name, col], _}
 				<AgentCard {name} colour={col} spymaster={true} />
 			{/each}
-		{:else} 
+		{:else}
 			{#each Object.entries($state.board) as [name, col], _}
 				<AgentCard {name} colour={col} spymaster={false} />
 			{/each}

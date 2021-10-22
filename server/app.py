@@ -52,10 +52,15 @@ def clue_sent(data):
 
 @socket.on("create_game")
 def create_game(gameId):
-    game = Game(gameId)
-    ROOMS[gameId] = game
-    print(f"create game with ID: {gameId}")
-    # emit("create_game", game.to_json(), room=gameId)
+    # check game doesn't exist:
+    print(request.sid)
+    if gameId in ROOMS.keys():
+        print("game exists")
+        emit("cant_create", roonm=request.sid)
+    else:
+        game = Game(gameId)
+        ROOMS[gameId] = game
+        emit("create_game", room=request.sid)
 
 @socket.on("join")
 def join(data):
@@ -82,6 +87,11 @@ def make_move(data):
         game.decrement_guesses()
 
         emit("send-state", game.to_json(), room=data["gameId"])
+
+@socket.on("game_over")
+def game_over(game_id):
+    game = ROOMS[game_id]
+    game.over = True
 
 if __name__ == "__main__":
     socket.run(app, host='0.0.0.0', port=5000, debug=True)
