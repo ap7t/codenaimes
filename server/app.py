@@ -55,7 +55,6 @@ def create_game(gameId):
     # check game doesn't exist:
     print(request.sid)
     if gameId in ROOMS.keys():
-        print("game exists")
         emit("cant_create", roonm=request.sid)
     else:
         game = Game(gameId)

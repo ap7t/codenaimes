@@ -32,6 +32,7 @@
 	}
 
 	socket.on("before-join", function (game) {
+		console.log(game);
 		$state = game;
 		goto(`/game/${gameId}/player/${role.toLowerCase()}`);
 	});
