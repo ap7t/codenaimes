@@ -36,7 +36,7 @@
 			return;
 		}
 		// validate clue
-		let match = re.exec(clue.);
+		let match = re.exec(clue);
 		if (match) {
 			guesses = parseInt(clue.split(" ")[1]);
 			let data = { clue: clue, guesses: guesses, gameId: gameId, team: $team };
