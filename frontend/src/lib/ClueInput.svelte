@@ -36,7 +36,7 @@
 			return;
 		}
 		// validate clue
-		let match = re.exec(clue.);
+		let match = re.exec(clue);
 		if (match) {
 			guesses = parseInt(clue.split(" ")[1]);
 			let data = { clue: clue, guesses: guesses, gameId: gameId, team: $team };
@@ -53,7 +53,7 @@
 	<!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
 	<Title id="simple-title">Invalid Clue</Title>
 	<Content id="simple-content"
-		>Your clue must be in the form "word number": example 4<br />Please try again! example 4
+		>Your clue must be in the form "word number": example 4<br />Please try again!
 	</Content>
 	<Actions>
 		<Button>
