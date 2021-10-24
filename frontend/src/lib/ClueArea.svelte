@@ -2,11 +2,22 @@
 	import { socket } from "../socket.js";
 	import { page } from "$app/stores";
 	import { fade } from "svelte/transition";
+	import { beforeUpdate, afterUpdate } from "svelte";
 
 	let clue;
 	let clues = [];
+	let div;
+	let autoscroll;
 
 	let gameId = $page.params.id;
+
+	beforeUpdate(() => {
+		autoscroll = div && div.offsetHeight + div.scrollTop > div.scrollHeight - 20;
+	});
+
+	afterUpdate(() => {
+		if (autoscroll) div.scrollTo(0, div.scrollHeight);
+	});
 
 	socket.on("send-clue", function (clue) {
 		clues = [...clues, clue];
@@ -18,7 +29,7 @@
 
 <div class="scrollHider">
 	<h1>Clues</h1>
-	<div id="clues">
+	<div id="clues" bind:this={div}>
 		{#each clues as clue, i}
 			<p in:fade class={clue.team.toLowerCase()}>{clue.clue}</p>
 		{/each}
