@@ -63,6 +63,7 @@ def create_game(gameId):
 
 @socket.on("join")
 def join(data):
+    print("joining")
     game_id = data
     join_room(game_id)
     game = ROOMS[game_id]
