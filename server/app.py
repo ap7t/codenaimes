@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, send, join_room
-from datetime import datetime
-import time
+from datetime import datetime, timedelta
 from game import Game
 import random
 
@@ -23,7 +22,8 @@ def hello():
 
 @socket.on("message")
 def message(data):
-    data["timestamp"] = datetime.today().strftime("%H:%M")
+    # netsoc cloud time in utc, maybe use some js lib for showing time on frontend
+    data["timestamp"] = (datetime.today() + timedelta(hours=1)).strftime("%H:%M") 
     emit("message", data, room=data["gameId"])
 
 @socket.on("connect")
