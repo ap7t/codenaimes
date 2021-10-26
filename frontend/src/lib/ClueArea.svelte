@@ -5,6 +5,7 @@
 	import { beforeUpdate, afterUpdate } from "svelte";
 
 	let clue;
+	// let clues = ["test 4", "test 4", "test 4", "test 4"];
 	let clues = [];
 	let div;
 	let autoscroll;
@@ -39,7 +40,7 @@
 <style>
 	.scrollHider {
 		width: 100%;
-		height: 200px;
+		height: 400px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
