@@ -39,14 +39,14 @@
 		{/if}
 	</div>
 	<div class="endRound">
-		{#if $state.guesses > 0 && canMove && !spymaster}
+		{#if $state.guesses == 1 && canMove && !spymaster}
 			<Button
 				class={whosTurn}
 				variant="outlined"
 				on:click={() => socket.emit("end_round", $state.gameId)}
 			>
 				<Icon class="material-icons">block</Icon>
-				<Label>End round</Label>
+				<Label>Finish guessing</Label>
 			</Button>
 		{/if}
 	</div>
