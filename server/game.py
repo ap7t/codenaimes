@@ -102,6 +102,10 @@ class Game:
 
     def set_guesses(self, guesses):
         self.guesses = guesses
+    
+    def end_round(self):
+        self.round += 1
+        self.guesses = 0
 
     def __str__(self):
         return str(self.solution)

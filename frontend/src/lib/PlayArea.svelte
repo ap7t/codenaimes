@@ -16,7 +16,7 @@
 		<!-- {/if} -->
 	</div>
 	<div class="game">
-		<GameStats />
+		<GameStats {spymaster} />
 		<GameBoard {spymaster} />
 	</div>
 	<div class="side">

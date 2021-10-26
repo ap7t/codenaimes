@@ -44,7 +44,7 @@ def disconnect():
 def clue_sent(data):
     game = ROOMS[data["gameId"]] 
     clue = data["clue"]
-    game.set_guesses(data["guesses"]) 
+    game.set_guesses(data["guesses"] + 1)
     game.current_clue = clue
     print("game:", game.board)
     emit("send-state", game.to_json(), room=data["gameId"])
@@ -77,15 +77,20 @@ def make_move(data):
     print(data)
     if not data["correct"]:
         game.flip_card(data["card"]["name"])
-        game.round += 1
-        game.guesses = 0
-
+        game.end_round() 
         emit("send-state", game.to_json(), room=data["gameId"])
     else:
         game.flip_card(data["card"]["name"])
         game.decrement_guesses()
 
         emit("send-state", game.to_json(), room=data["gameId"])
+
+@socket.on("end_round")
+def end_round(gameId):
+    game = ROOMS[gameId]
+    game.end_round()
+    emit("send-state", game.to_json(), room=gameId)
+
 
 @socket.on("game_over")
 def game_over(game_id):

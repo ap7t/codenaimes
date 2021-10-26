@@ -1,11 +1,17 @@
 <script lang="ts">
-	import { state, guesses } from "../stores";
+	import { team, state } from "../stores";
 	import { page } from "$app/stores";
 	import GameBoard from "./GameBoard.svelte";
 	import LinkGame from "./LinkGame.svelte";
-	import { Icon } from "@smui/button";
+	import { socket } from "../socket.js";
+	import Button, { Label, Icon } from "@smui/button";
 
 	$: whosTurn = $state.round % 2 == 0 ? "red" : "blue";
+
+	$: canMove =
+		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
+
+	export let spymaster = false;
 </script>
 
 <!-- guesses left: {guessesLeft} -->
@@ -30,6 +36,18 @@
 		{#if $state.guesses > 0}
 			<Icon class="material-icons">contact_support</Icon>
 			{$state.guesses} guesses left
+		{/if}
+	</div>
+	<div class="endRound">
+		{#if $state.guesses > 0 && canMove && !spymaster}
+			<Button
+				class={whosTurn}
+				variant="outlined"
+				on:click={() => socket.emit("end_round", $state.gameId)}
+			>
+				<Icon class="material-icons">block</Icon>
+				<Label>End round</Label>
+			</Button>
 		{/if}
 	</div>
 </div>
@@ -70,5 +88,9 @@
 
 	.blue {
 		color: #2767ff;
+	}
+
+	.endRound {
+		margin-top: 0.5rem;
 	}
 </style>
