@@ -33,6 +33,19 @@
 		}
 	}
 
+	function foundColour(name) {
+		let found = $state.board[name];
+		if (found && spymaster) {
+			if (found == "R") {
+				return "red";
+			} else if (found == "B") {
+				return "blue";
+			} else if (found == "O") {
+				return "civilianFound";
+			}
+		}
+	}
+
 	let notYourTurnSnackbar: SnackbarComponentDev;
 	let noClueSnackbar: SnackbarComponentDev;
 	let yourSpymasterSnackbar: SnackbarComponentDev;
@@ -64,7 +77,7 @@
 					msg = "Oof, that's a red agent, moving onto the next round";
 					break;
 				case "O":
-					msg = "Oof, that's a civilian, moving onto the next round";
+					msg = "Oof, that's a civilian, moving onto the next roun''d";
 					break;
 			}
 			wrongCardSnackbar.open();
@@ -111,6 +124,6 @@
 		padded
 		class={spymaster && $state.board[name] ? classString + " found" : classString}
 	>
-		{name}
+		<span class={spymaster && $state.board[name] ? foundColour(name) : ""}>{name}</span>
 	</PrimaryAction>
 </Card>

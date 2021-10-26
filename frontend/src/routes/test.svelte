@@ -1,11 +1,7 @@
 <script>
-	let rand = -1;
-	function getRand() {
-		fetch("./rand")
-			.then((d) => d.text())
-			.then((d) => (rand = d));
-	}
+	import AgentCard from "$lib/AgentCard.svelte";
 </script>
 
-<h1>Your number is {rand}!</h1>
-<button on:click={getRand}>Get a random number</button>
+<AgentCard name={"Test"} colour={"R"} spymaster={true} />
+<AgentCard name={"testicles"} colour={"B"} spymaster={true} />
+<AgentCard name={"shit"} colour={"O"} spymaster={true} />

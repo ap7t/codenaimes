@@ -8,12 +8,12 @@
 
 {#if role == "spymaster"}
 	<div>
-		<Icon class="material-icons {team.toLowerCase()}" slot="leadingIcon">person_search</Icon>
+		<Icon class="material-icons {team.toLowerCase()}" slot="leadingIcon">support_agent</Icon>
 		<span class={team.toLowerCase()}>{username}</span>
 	</div>
 {:else}
 	<div>
-		<Icon class="material-icons {team.toLowerCase()}" slot="leadingIcon">support_agent</Icon>
+		<Icon class="material-icons {team.toLowerCase()}" slot="leadingIcon">person_search</Icon>
 		<span class={team.toLowerCase()}>{username}</span>
 	</div>
 {/if}
