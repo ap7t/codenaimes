@@ -51,7 +51,7 @@
 		</div>
 	</div>
 	<div class="endRound">
-		{#if $state.guesses == 1 && canMove && !spymaster}
+		{#if $state.guesses > 0 && canMove && !spymaster}
 			<Button
 				class={whosTurn}
 				variant="outlined"
