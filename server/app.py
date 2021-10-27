@@ -36,10 +36,13 @@ def connect():
 
 @socket.on("disconnect")
 def disconnect():
-    global ACTIVE_USERS
-    ACTIVE_USERS -= 1 
-    print(f"\n\n[CLIENT DISCONNECTED]: {request.sid}")
-    print(f"total connected users: {ACTIVE_USERS}\n\n")
+    for game in ROOMS.values():
+        print(game)
+        if game.has_user(request.sid):
+            user = game.delete_user(request.sid)
+            emit("user_leave", user.__dict__, room=game.id)
+            emit("send-state", game.to_json(), room=game.id)
+            
 
 @socket.on("send-clue")
 def clue_sent(data):

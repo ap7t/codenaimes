@@ -113,7 +113,8 @@ class Game:
     def delete_user(self, sid):
         return self.users.pop(sid)
 
-
+    def has_user(self, sid):
+        return True if sid in self.users.keys() else False
 
     def __str__(self):
         return str(self.solution)
