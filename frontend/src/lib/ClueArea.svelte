@@ -24,7 +24,6 @@
 		clues = [...clues, clue];
 		let objDiv = document.getElementById("clues");
 		objDiv.scrollTop = objDiv.scrollHeight;
-		console.log(clues);
 	});
 </script>
 

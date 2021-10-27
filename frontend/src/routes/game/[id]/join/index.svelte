@@ -31,8 +31,12 @@
 		}
 	}
 
+	const onInput = (event) => {
+		if (event.key !== "Enter") return;
+		handleSubmit();
+	};
+
 	socket.on("before-join", function (game) {
-		console.log(game);
 		$state = game;
 		goto(`/game/${gameId}/player/${role.toLowerCase()}`);
 	});
@@ -51,7 +55,7 @@
 <div>
 	<div>
 		<h2>1. Identify yourself</h2>
-		<Textfield id="nameInput" required={true} bind:value={name} label="Name">
+		<Textfield id="nameInput" required={true} bind:value={name} on:keydown={onInput} label="Name">
 			<HelperText slot="helper">Enter a name so you can be recognised by your team</HelperText>
 		</Textfield>
 	</div>

@@ -4,9 +4,10 @@
 	import Dialog, { Title, Content, Actions } from "@smui/dialog";
 	import { socket } from "../socket.js";
 	import Button, { Label } from "@smui/button";
-	import { state } from "../stores";
+	import { state, username, team } from "../stores";
 	import LayoutGrid, { Cell, InnerGrid } from "@smui/layout-grid";
 	import GameStats from "./GameStats.svelte";
+	import { onMount, onDestroy } from "svelte";
 
 	export let spymaster = false;
 
@@ -39,6 +40,23 @@
 		open = true;
 		socket.emit("game-over", $state.gameId);
 	}
+
+	onMount(() => {
+		let data = {
+			gameId: $state.gameId,
+			name: $username,
+			team: $team,
+			role: spymaster ? "spymaster" : "operative"
+		};
+		socket.emit("user_join", data);
+	});
+
+	onDestroy(() => {
+		let data = {
+			gameId: $state.gameId
+		};
+		socket.emit("user_leave", data);
+	});
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -55,6 +73,7 @@
 	</Actions>
 </Dialog>
 
+<!-- <svelte:window on:load={handleLoad} /> -->
 <div class="agentsGrid">
 	{#if $state != {}}
 		{#if spymaster}

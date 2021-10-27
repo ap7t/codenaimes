@@ -45,18 +45,39 @@
 		socket.emit("message", data);
 		message = "";
 	};
+
+	socket.on("user_join", function (data) {
+		data["announcement"] = "joined";
+		messages = [...messages, data];
+		let objDiv = document.getElementById("scrollHider");
+		objDiv.scrollTop = objDiv.scrollHeight;
+	});
+
+	socket.on("user_leave", function (data) {
+		data["announcement"] = "left";
+		messages = [...messages, data];
+		let objDiv = document.getElementById("scrollHider");
+		objDiv.scrollTop = objDiv.scrollHeight;
+	});
 </script>
 
 <div class="scrollHider">
 	<h1>Chat</h1>
 	<div class="messages" bind:this={div}>
 		{#each messages as message, i}
-			<p>
-				<User username={message.username} team={message.team} role={message.role} />
-				<span class="time">{message.timestamp}</span>
-				<br />
-				{message.message}
-			</p>
+			{#if message.announcement}
+				<p>
+					<User username={message.username} team={message.team} role={message.role} />
+					{message.announcement}
+				</p>
+			{:else}
+				<p>
+					<User username={message.username} team={message.team} role={message.role} />
+					<span class="time">{message.timestamp}</span>
+					<br />
+					{message.message}
+				</p>
+			{/if}
 		{/each}
 	</div>
 </div>

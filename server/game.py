@@ -25,7 +25,6 @@ class Game:
         self.round = 0
         self.total_guesses = 0
         self.guesses = 0
-        self.teams = None
         self.red_agents = AGENTS_PER_TEAM + 1
         self.blue_agents = AGENTS_PER_TEAM
         self.assassinated = False
@@ -33,6 +32,7 @@ class Game:
         self.solution = None
         self.over = False
         self.current_clue = None
+        self.users = {}
         self.create_board()
 
     def to_json(self):
@@ -43,13 +43,13 @@ class Game:
             "solution": self.solution,
             "date_created": str(self.date_created),
             "date_last_updated": str(self.date_last_updated),
-            "teams": self.teams,
             "red_agents": self.red_agents,
             "blue_agents": self.blue_agents,
             "assassinated": self.assassinated,
             "round": self.round,
             "guesses": self.guesses,
-            "current_clue": self.current_clue
+            "current_clue": self.current_clue,
+            "users": len(self.users)
         }
 
     def create_board(self):
@@ -106,6 +106,14 @@ class Game:
     def end_round(self):
         self.round += 1
         self.guesses = 0
+
+    def add_user(self, user):
+        self.users[user.sid] = user
+
+    def delete_user(self, sid):
+        return self.users.pop(sid)
+
+
 
     def __str__(self):
         return str(self.solution)

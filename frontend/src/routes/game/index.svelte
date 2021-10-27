@@ -31,6 +31,11 @@
 			ai = false;
 		}
 	}
+
+	const onInput = (event) => {
+		if (event.key !== "Enter") return;
+		handleJoin();
+	};
 </script>
 
 <svelte:head>
@@ -63,7 +68,14 @@
 	</div>
 	<div class="join">
 		<h1>Join an existing game</h1>
-		<Textfield id="gameId" variant="outlined" required={true} bind:value={gameId} label="Game ID">
+		<Textfield
+			id="gameId"
+			variant="outlined"
+			required={true}
+			bind:value={gameId}
+			on:keydown={onInput}
+			label="Game ID"
+		>
 			<HelperText slot="helper">Enter the Game ID to join the game</HelperText>
 		</Textfield>
 		<Button variant="raised" on:click={handleJoin}>

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, send, join_room
 from datetime import datetime, timedelta
 from game import Game
+from user import User
 import random
 
 app = Flask(__name__)
@@ -63,19 +64,16 @@ def create_game(gameId):
 
 @socket.on("join")
 def join(data):
-    print("joining")
-    game_id = data
-    join_room(game_id)
-    game = ROOMS[game_id]
-    print(f"got game {game.board}")
+    gameId = data
+    join_room(gameId)
+    game = ROOMS[gameId]
     # get the game that is associated with the room here
-    emit("before-join", game.to_json(), room=game_id)
+    emit("before-join", game.to_json(), room=gameId)
 
 
 @socket.on("make_move")
 def make_move(data):
     game = ROOMS[data["gameId"]]
-    print(data)
     if not data["correct"]:
         game.flip_card(data["card"]["name"])
         game.end_round() 
@@ -94,9 +92,24 @@ def end_round(gameId):
 
 
 @socket.on("game_over")
-def game_over(game_id):
-    game = ROOMS[game_id]
+def game_over(gameId):
+    game = ROOMS[gameId]
     game.over = True
 
+@socket.on("user_join") 
+def user_join(data):
+    game = ROOMS[data["gameId"]]
+    user = User(request.sid, data["name"], data["team"], data["role"])
+    game.add_user(user)
+    emit("user_join", user.__dict__, room=data["gameId"])
+    emit("send-state", game.to_json(), room=data["gameId"])
+
+@socket.on("user_leave") 
+def user_leave(data):
+    game = ROOMS[data["gameId"]]
+    user = game.delete_user(request.sid)
+    emit("user_leave", user.__dict__, room=data["gameId"])
+    emit("send-state", game.to_json(), room=data["gameId"])
+    
 if __name__ == "__main__":
     socket.run(app, host='0.0.0.0', port=5000, debug=True)

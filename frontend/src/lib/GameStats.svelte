@@ -5,11 +5,17 @@
 	import LinkGame from "./LinkGame.svelte";
 	import { socket } from "../socket.js";
 	import Button, { Label, Icon } from "@smui/button";
+	import { fly } from "svelte/transition";
+	import User from "$lib/User.svelte";
 
 	$: whosTurn = $state.round % 2 == 0 ? "red" : "blue";
 
 	$: canMove =
 		($team === "Red" && $state.round % 2 == 0) || ($team === "Blue" && $state.round % 2 != 0);
+
+	function sleep(ms) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
 
 	export let spymaster = false;
 </script>
@@ -33,10 +39,16 @@
 		<LinkGame />
 	</div>
 	<div class="guesses">
-		{#if $state.guesses > 0}
-			<Icon class="material-icons">contact_support</Icon>
-			{$state.guesses} guesses left
-		{/if}
+		<div>
+			{#if $state.guesses > 0}
+				<Icon class="material-icons">contact_support</Icon>
+				{$state.guesses} guesses left
+			{/if}
+		</div>
+		<div>
+			<Icon class="material-icons">group</Icon>
+			{$state.users}
+		</div>
 	</div>
 	<div class="endRound">
 		{#if $state.guesses == 1 && canMove && !spymaster}
@@ -73,7 +85,8 @@
 	.guesses {
 		display: flex;
 		flex-direction: row;
-		justify-content: left;
+		justify-content: space-between;
+		margin-top: 0.5rem;
 	}
 
 	.round {
@@ -92,5 +105,10 @@
 
 	.endRound {
 		margin-top: 0.5rem;
+	}
+
+	.userStats {
+		display: flex;
+		justify-content: end;
 	}
 </style>
