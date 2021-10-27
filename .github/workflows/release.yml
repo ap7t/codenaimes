@@ -31,6 +31,7 @@ jobs:
           script: |
             docker-compose pull
             docker-compose up -d --no-build
+            docker system prune -f
 
 
 
