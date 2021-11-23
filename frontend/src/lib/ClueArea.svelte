@@ -40,7 +40,7 @@
 	function requestClue() {
 		console.log(prevClue, $state.current_clue);
 		console.log(lastGo, whosTurn);
-		if (prevClue === $state.current_clue && lastGo =	= whosTurn) {
+		if (prevClue === $state.current_clue && lastGo == whosTurn) {
 			alreadyRequestedClueSnackbar.open();
 			return;
 		}
