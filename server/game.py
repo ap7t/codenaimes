@@ -25,8 +25,8 @@ class Game:
         self.round = 0
         self.total_guesses = 0
         self.guesses = 0
-        self.red_agents = AGENTS_PER_TEAM + 1
-        self.blue_agents = AGENTS_PER_TEAM
+        self.num_red_agents = AGENTS_PER_TEAM + 1 
+        self.num_blue_agents = AGENTS_PER_TEAM 
         self.assassinated = False
         self.board = None
         self.solution = None
@@ -34,6 +34,10 @@ class Game:
         self.current_clue = None
         self.users = {}
         self.create_board()
+        self.red_agents = self.get_agents("R")
+        self.blue_agents = self.get_agents("B")
+        self.civilians = self.get_agents("O")
+        self.assassin = self.get_agents("X")
 
     def to_json(self):
         return {
@@ -43,8 +47,8 @@ class Game:
             "solution": self.solution,
             "date_created": str(self.date_created),
             "date_last_updated": str(self.date_last_updated),
-            "red_agents": self.red_agents,
-            "blue_agents": self.blue_agents,
+            "red_agents": self.num_red_agents,
+            "blue_agents": self.num_blue_agents,
             "assassinated": self.assassinated,
             "round": self.round,
             "guesses": self.guesses,
@@ -86,9 +90,9 @@ class Game:
     def flip_card(self, word):
         self.date_last_updated = datetime.now()
         if self.solution[word] == RED and not self.board[word]:
-            self.red_agents -= 1
+            self.num_red_agents -= 1
         elif self.solution[word] == BLUE and not self.board[word]:
-            self.blue_agents -= 1
+            self.num_blue_agents -= 1
         elif self.solution[word] == ASSASSIN and not self.board[word]:
             self.assassinated = True
         self.board[word] = self.solution[word]
@@ -115,6 +119,14 @@ class Game:
 
     def has_user(self, sid):
         return True if sid in self.users.keys() else False
+
+    def get_agents(self, colour):
+        return [agent.lower() for agent, col in self.solution.items() if col == colour ]
+
+    def remaining_agents(self, team):
+        agents = self.red_agents if team == "red" else self.blue_agents
+        return  [a for a in agents if not self.board[a.upper()]]
+
 
     def __str__(self):
         return str(self.solution)

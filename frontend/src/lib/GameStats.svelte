@@ -18,6 +18,8 @@
 	}
 
 	export let spymaster = false;
+	export let ai = false;
+	let data = { gameId: $state.gameId, ai: ai };
 </script>
 
 <!-- guesses left: {guessesLeft} -->
@@ -36,7 +38,7 @@
 			<span class="blue">{$state.blue_agents}</span>
 		</div>
 
-		<LinkGame />
+		<LinkGame {ai} />
 	</div>
 	<div class="guesses">
 		<div>
@@ -52,11 +54,7 @@
 	</div>
 	<div class="endRound">
 		{#if $state.guesses > 0 && canMove && !spymaster}
-			<Button
-				class={whosTurn}
-				variant="outlined"
-				on:click={() => socket.emit("end_round", $state.gameId)}
-			>
+			<Button class={whosTurn} variant="outlined" on:click={() => socket.emit("end_round", data)}>
 				<Icon class="material-icons">block</Icon>
 				<Label>Finish guessing</Label>
 			</Button>

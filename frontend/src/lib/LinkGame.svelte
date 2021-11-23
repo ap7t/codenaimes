@@ -5,11 +5,16 @@
 	import Snackbar, { SnackbarComponentDev, Actions } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
 
+	export let ai = false;
 	let gameLink;
 	let gameId = $page.params.id;
 	let text = "Copy";
 	onMount(() => {
-		gameLink = `${window.location.origin}/game/${gameId}/join`;
+		if (ai) {
+			gameLink = `${window.location.origin}/game/ai/${gameId}/join`;
+		} else {
+			gameLink = `${window.location.origin}/game/${gameId}/join`;
+		}
 	});
 
 	function sleep(ms) {

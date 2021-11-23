@@ -23,9 +23,13 @@
 		label = "I await with bated breath";
 	}
 
-	function handleJoin() {
+	function handleJoin(aiGame) {
 		if (gameId) {
-			goto(`/game/${gameId}/join`);
+			if (aiGame) {
+				goto(`/game/ai/${gameId}/join`);
+			} else {
+				goto(`/game/${gameId}/join`);
+			}
 		} else {
 			open = true;
 			ai = false;
@@ -34,7 +38,7 @@
 
 	const onInput = (event) => {
 		if (event.key !== "Enter") return;
-		handleJoin();
+		handleJoin(false);
 	};
 </script>
 
@@ -60,8 +64,8 @@
 			<Button on:click={() => goto("/game/create")}>
 				<Label>Play with humans</Label>
 			</Button>
-
-			<Button on:click={() => (open = true)}>
+			<br />
+			<Button on:click={() => goto("/game/ai/create")}>
 				<Label>Play with AI</Label>
 			</Button>
 		</div>
@@ -78,8 +82,12 @@
 		>
 			<HelperText slot="helper">Enter the Game ID to join the game</HelperText>
 		</Textfield>
-		<Button variant="raised" on:click={handleJoin}>
+		<Button variant="raised" on:click={() => handleJoin(false)}>
 			<Label>Join game</Label>
+		</Button>
+		<br />
+		<Button variant="raised" on:click={() => handleJoin(true)}>
+			<Label>Join gaime</Label>
 		</Button>
 	</div>
 </div>

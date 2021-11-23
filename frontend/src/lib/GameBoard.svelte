@@ -10,6 +10,7 @@
 	import { onMount, onDestroy } from "svelte";
 
 	export let spymaster = false;
+	export let ai = false;
 
 	let open = false;
 	let winner;
@@ -48,7 +49,11 @@
 			team: $team,
 			role: spymaster ? "spymaster" : "operative"
 		};
-		socket.emit("user_join", data);
+		if (ai) {
+			socket.emit("ai_user_join", data);
+		} else {
+			socket.emit("user_join", data);
+		}
 	});
 
 	onDestroy(() => {
@@ -78,11 +83,11 @@
 	{#if $state != {}}
 		{#if spymaster}
 			{#each Object.entries($state.solution) as [name, col], _}
-				<AgentCard {name} colour={col} spymaster={true} />
+				<AgentCard {name} colour={col} spymaster={true} {ai} />
 			{/each}
 		{:else}
 			{#each Object.entries($state.board) as [name, col], _}
-				<AgentCard {name} colour={col} spymaster={false} />
+				<AgentCard {name} colour={col} spymaster={false} {ai} />
 			{/each}
 		{/if}
 	{/if}

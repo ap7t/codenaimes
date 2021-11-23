@@ -5,19 +5,20 @@
 	import GameBoard from "$lib/GameBoard.svelte";
 
 	export let spymaster = false;
+	export let ai = false;
 	import GameStats from "./GameStats.svelte";
 </script>
 
 <div class="container">
 	<div class="side">
-		<ClueArea />
+		<ClueArea {ai} />
 		<!-- {#if spymaster} -->
 		<ClueInput {spymaster} />
 		<!-- {/if} -->
 	</div>
 	<div class="game">
-		<GameStats {spymaster} />
-		<GameBoard {spymaster} />
+		<GameStats {spymaster} {ai}/>
+		<GameBoard {spymaster} {ai} />
 	</div>
 	<div class="side">
 		<ChatArea {spymaster} />

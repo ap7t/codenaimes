@@ -10,6 +10,7 @@
 	export let colour;
 	export let spymaster;
 	export let name;
+	export let ai;
 	let msg;
 
 	let classString = "agentCard";
@@ -69,7 +70,7 @@
 					break;
 			}
 			wrongCardSnackbar.open();
-			let data = { card: card, gameId: gameId, correct: false };
+			let data = { card: card, gameId: gameId, correct: false, ai: ai };
 			socket.emit("make_move", data);
 		} else if ($state.round % 2 != 0 && $state.solution[name] != "B") {
 			switch ($state.solution[name]) {
@@ -81,10 +82,10 @@
 					break;
 			}
 			wrongCardSnackbar.open();
-			let data = { card: card, gameId: gameId, correct: false };
+			let data = { card: card, gameId: gameId, correct: false, ai: ai };
 			socket.emit("make_move", data);
 		} else {
-			let data = { card: card, gameId: gameId, correct: true };
+			let data = { card: card, gameId: gameId, correct: true, ai: ai };
 			socket.emit("make_move", data);
 		}
 	}
