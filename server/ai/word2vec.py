@@ -6,7 +6,7 @@ class Word2Vec:
     # save to file to speed up things
     def __init__(self):
         # filename = "GoogleNews-vectors-negative300.bin"
-        filename = "./ai/GoogleNews-vectors-negative300.bin"
+        filename = "data/GoogleNews-vectors-negative300.bin"
         self.model = KeyedVectors.load_word2vec_format(filename, binary=True)
         
     def generate_clues(self, game, team="red"):
