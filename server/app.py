@@ -17,7 +17,7 @@ app.config["SECRET_KEY"] = "changeme"
 socket = SocketIO(app, cors_allowed_origins="*")
 
 # word2vec
-word2vec = Word2Vec()
+# word2vec = Word2Vec()
 # with open("./ai/word2vec.obj", "rb") as f:
     # word2vec = pickle.load(f)
 
