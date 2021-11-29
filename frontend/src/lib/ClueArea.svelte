@@ -7,6 +7,7 @@
 	import { state, team } from "../stores";
 	import Snackbar, { Actions, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
+	import CircularProgress from "@smui/circular-progress";
 
 	let clue;
 	// let clues = ["test 4", "test 4", "test 4", "test 4"];
@@ -15,6 +16,7 @@
 	let autoscroll;
 	let prevClue = "";
 	let lastGo = "red";
+	let visible = false;
 
 	let gameId = $page.params.id;
 	$: whosTurn = $state.round % 2 == 0 ? "red" : "blue";
@@ -30,6 +32,7 @@
 	});
 
 	socket.on("send-clue", function (clue) {
+		visible = false;
 		clues = [...clues, clue];
 		prevClue = clue.clue;
 		lastGo = whosTurn;
@@ -47,13 +50,25 @@
 		console.log("reqeusting");
 		let data = { gameId: gameId, team: whosTurn };
 		socket.emit("request-clue", data);
+		visible = true;
 	}
 	let alreadyRequestedClueSnackbar: SnackbarComponentDev;
 </script>
 
 <div class="scrollHider">
 	<h1>Clues</h1>
+	<!-- {#if visible}
+		<div style="display: flex; justify-content: center">
+			<CircularProgress
+				class="my-four-colors"
+				style="height: 32px; width: 32px;"
+				indeterminate
+				fourColor
+			/>
+		</div>
+	{/if} -->
 	<div>
+		<!-- {#if canMove && !visible} -->
 		{#if canMove}
 			<Button on:click={requestClue}>
 				<Label>Request clue</Label>

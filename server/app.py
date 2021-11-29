@@ -12,12 +12,14 @@ import time
 # Flask
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "changeme"
+print("hello from flask")
 
 # Web sockets
 socket = SocketIO(app, cors_allowed_origins="*")
 
 # word2vec
-# word2vec = Word2Vec()
+word2vec = Word2Vec()
+print("made word2vec")
 # with open("./ai/word2vec.obj", "rb") as f:
     # word2vec = pickle.load(f)
 
@@ -91,9 +93,7 @@ def ai_create_game(gameId):
         print("making ai spymaster")
         t = time.time()
         game = Game(gameId)
-        red_clues = word2vec.generate_clues(game, "red")
-        blue_clues = word2vec.generate_clues(game, "blue")
-        spymaster = Spymaster(gameId, red_clues, blue_clues)
+        spymaster = Spymaster(gameId, game.red_agents, game.blue_agents, word2vec)
         AI_ROOMS[gameId] = {"game": game, "spymaster": spymaster}
         print("done making ai spymaster: ", (time.time() - t) / 60)
         emit("ai_create_game", room=request.sid)
@@ -120,14 +120,16 @@ def request_clue(data):
     gameId = data["gameId"]
     game = AI_ROOMS[gameId]["game"]
     print(AI_ROOMS)
-    print(game.board)
+    # print(game.board)
     spymaster = AI_ROOMS[gameId]["spymaster"]
     team = data["team"]
-    if team == "Red":
-        clue = spymaster.generate_red_clue(game.remaining_agents("red"))
+    print(team)
+    if team == "red":
+        clue = spymaster.generate_red_clue(2, 1, game.remaining_agents("red"))
     else:
-        clue = spymaster.generate_blue_clue(game.remaining_agents("blue"))
+        clue = spymaster.generate_blue_clue(2,1, game.remaining_agents("blue"))
     data["clue"] = clue[0]
+    print(f"Generated: {clue}")
     game.set_guesses(len(clue[1]) + 1)
     game.current_clue = clue[0]
     print(game.current_clue)

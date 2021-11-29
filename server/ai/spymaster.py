@@ -1,41 +1,137 @@
+import itertools
+import heapq
+from nltk.stem import PorterStemmer
+
 class Spymaster:
-    def __init__(self, id, red_clues, blue_clues):
+    def __init__(self, id, red_words, blue_words, word2vec):
         self.id = id
-        self.red_clues = red_clues
-        self.blue_clues = blue_clues
-        self.red_used = []
-        self.blue_used = []
+        self.red_words = red_words
+        self.blue_words = blue_words
+        self.words = self.red_words + self.blue_words
+        self.embedding = word2vec
+        self.weighted_nn = dict()
+        self.stemmer = PorterStemmer()
+        for word in self.words:
+            self.weighted_nn[word] = self.embedding.get_weighted_nn(word)
 
-    def generate_red_clue(self, remaining_agents):
-        # first try get doubles
-        for words, clues in self.red_clues.items():
-            if words[0] in remaining_agents and words[1] in remaining_agents:
-                for clue in clues:
-                    if clue not in self.red_used:
-                        self.red_used.append(clue)
-                        return (f"{clue} {len(words)}", words)
+    def generate_blue_clue(self, n, penalty, remaining_agents):
+        pq = []
 
-        # otherwise just go for ones whether one is still there
-        for words, clues in self.red_clues.items():
-            if words[0] in remaining_agents or words[1] in remaining_agents:
-                for clue in clues:
-                    if clue not in self.red_used:
-                        self.red_used.append(clue)
-                        return (f"{clue} {len(words)}", words) 
+        for word_set in itertools.combinations(remaining_agents, n):
+            highest_clues, score = self.get_highest_blue_clue(word_set, penalty)
+            heapq.heappush(pq, (-1 * score, highest_clues, word_set))
+
+        best_clues = []
+        best_board_words_for_clue = []
+        best_scores = []
+        count = 0
+
+        while pq:
+            score, clues, word_set = heapq.heappop(pq)
+
+            if count >= 5:
+                break
             
-    def generate_blue_clue(self, remaining_agents):
-        # first try get doubles
-        for words, clues in self.blue_clues.items():
-            if words[0] in remaining_agents and words[1] in remaining_agents:
-                for clue in clues:
-                    if clue not in self.blue_used:
-                        self.blue_used.append(clue)
-                        return (f"{clue} {len(words)}", words) 
+            best_clues.append(clues)
+            best_scores.append(score)
+            best_board_words_for_clue.append(word_set)
 
-        # otherwise just go for ones whether one is still there
-        for words, clues in self.blue_clues.items():
-            if words[0] in remaining_agents or words[1] in remaining_agents:
-                for clue in clues:
-                    if clue not in self.blue_used:
-                        self.blue_used.append(clue)
-                        return (f"{clue} {len(words)}", words) 
+            count += 1
+
+        # return best_scores, best_clues, best_board_words_for_clue
+        return best_clues[0], best_board_words_for_clue[0]
+
+    def get_highest_blue_clue(self, chosen_words, penalty=1.0):
+        potential_clues = set()
+        for word in chosen_words:
+            nns = self.weighted_nn[word]
+            potential_clues.update(nns)
+        
+        highest_scoring_clues = []
+        highest_score = float("-inf")
+
+        for clue in potential_clues:
+            if not self.is_valid_clue(clue):
+                continue
+            blue_word_counts = []
+            for blue_word in chosen_words:
+                if clue in self.weighted_nn[blue_word]:
+                    blue_word_counts.append(self.weighted_nn[blue_word][clue])
+                else:
+                    blue_word_counts.append(self.embedding.get_word_similarity(blue_word, clue))
+            
+            embedding_score = self.embedding.penalise(chosen_words, clue, self.red_words)
+            score = sum(blue_word_counts) + embedding_score
+
+            
+            if score > highest_score:
+                highest_scoring_clues = [clue]
+                highest_score = score
+            elif score == highest_score:
+                highest_scoring_clues.append(clue)
+        
+        return highest_scoring_clues, highest_score
+
+    def generate_red_clue(self, n, penalty, remaining_agents):
+        pq = []
+
+        for word_set in itertools.combinations(remaining_agents, n):
+            highest_clues, score = self.get_highest_red_clue(word_set, penalty)
+            heapq.heappush(pq, (-1 * score, highest_clues, word_set))
+
+        best_clues = []
+        best_board_words_for_clue = []
+        best_scores = []
+        count = 0
+
+        while pq:
+            score, clues, word_set = heapq.heappop(pq)
+
+            if count >= 5:
+                break
+            
+            best_clues.append(clues)
+            best_scores.append(score)
+            best_board_words_for_clue.append(word_set)
+
+            count += 1
+
+        # return best_scores, best_clues, best_board_words_for_clue
+        return best_clues[0], best_board_words_for_clue[0]
+
+    def get_highest_red_clue(self, chosen_words, penalty=1.0):
+        potential_clues = set()
+        for word in chosen_words:
+            nns = self.weighted_nn[word]
+            potential_clues.update(nns)
+        
+        highest_scoring_clues = []
+        highest_score = float("-inf")
+
+        for clue in potential_clues:
+            if not self.is_valid_clue(clue):
+                continue
+            red_word_counts = []
+            for red_word in chosen_words:
+                if clue in self.weighted_nn[red_word]:
+                    red_word_counts.append(self.weighted_nn[red_word][clue])
+                else:
+                    red_word_counts.append(self.embedding.get_word_similarity(red_word, clue))
+            
+            embedding_score = self.embedding.penalise(chosen_words, clue, self.blue_words)
+            score = sum(red_word_counts) + embedding_score
+
+            
+            if score > highest_score:
+                highest_scoring_clues = [clue]
+                highest_score = score
+            elif score == highest_score:
+                highest_scoring_clues.append(clue)
+        
+        return highest_scoring_clues, highest_score
+
+    def is_valid_clue(self, clue):
+        for board_word in self.words:
+            if (clue in board_word or board_word in clue or self.stemmer.stem(clue) == self.stemmer.stem(board_word) or not clue.isalpha()):
+                return False
+        return True

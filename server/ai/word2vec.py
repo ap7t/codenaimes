@@ -9,25 +9,45 @@ class Word2Vec:
         filename = "data/GoogleNews-vectors-negative300.bin"
         self.model = KeyedVectors.load_word2vec_format(filename, binary=True)
         
-    def generate_clues(self, game, team="red"):
-        ours = game.red_agents if team == "red" else game.blue_agents
-        theirs = game.blue_agents if team == "red" else game.red_agents
+    def get_weighted_nn(self, word, n=500):
+        nn_w_similarities = {}
 
-        clues = {}
-        for our1, our2 in itertools.combinations(ours, r=2):
-            our_list = [our1, our2]
-            # TODO: doesnt avoid similar to enemy as was giving strange results
-            candidates = [(c.lower(), s) for c,s in self.model.most_similar(positive=our_list, topn=50)]
-            clues[(our1, our2)] = [c for c,_ in candidates if self.is_valid(c, our_list)][:10]
-        return clues
+        # if word not in self.model.vocab:
+        #     return nn_w_similarities
+        neighbours_and_similarities = self.model.most_similar(word, topn=n)
+        for neighbour, similarity in neighbours_and_similarities:
+            if len(neighbour.split("-")) > 1 or len(neighbour.split("-")) > 1:
+                continue
+            neighbour  = neighbour.lower()
+            if neighbour not in nn_w_similarities:
+                nn_w_similarities[neighbour] = similarity
+            nn_w_similarities[neighbour] = max(similarity, nn_w_similarities[neighbour])
+            
+        return {k:v for k,v in nn_w_similarities.items() if k != word}
+
+    def penalise(self, chosen_words, potential_clue, agents):
+        max_similarity = float("-inf")
+        if potential_clue not in self.model:
+            return 0.0
+        
+        for agent in agents:
+            if agent in self.model:
+                similarity = self.model.similarity(agent, potential_clue)
+                if similarity > max_similarity:
+                    max_similarity = similarity
     
-    def is_valid(self, clue, possible_clues):
-        if "_" in clue:
-            return False
-        for poss in possible_clues:
-            if poss in clue or clue in poss:
-                return False
-        return True
+        return -0.5*max_similarity
+
+    def dict2vec_embedding_weight(self):
+        return 2.0
+
+    def get_word_similarity(self, word1, word2):
+        try:
+            return 2.0
+        except KeyError:
+            return -1.0
+
+
 
 if __name__ == "__main__":
     import pickle
