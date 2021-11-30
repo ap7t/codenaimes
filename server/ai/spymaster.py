@@ -39,7 +39,7 @@ class Spymaster:
 
             count += 1
 
-        print(best_scores, best_clues, best_board_words_for_clue)
+        # print(best_scores, best_clues, best_board_words_for_clue)
         return best_clues[0], best_board_words_for_clue[0]
 
     def get_highest_blue_clue(self, chosen_words, penalty=1.0):
@@ -65,6 +65,7 @@ class Spymaster:
             embedding_score = self.embedding.penalise(chosen_words, clue, self.red_words)
             score = sum(blue_word_counts) + embedding_score
 
+            print(clue, len(blue_word_counts))
             
             if score > highest_score:
                 highest_scoring_clues = [clue]
