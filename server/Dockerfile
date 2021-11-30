@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5000
 
-ENTRYPOINT ["/app/bin/gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--chdir", "/usr/src/", "app:app"]
+CMD ["python", "app.py"]

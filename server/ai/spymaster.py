@@ -16,6 +16,7 @@ class Spymaster:
 
     def generate_blue_clue(self, n, penalty, remaining_agents):
         pq = []
+        
 
         for word_set in itertools.combinations(remaining_agents, n):
             highest_clues, score = self.get_highest_blue_clue(word_set, penalty)
@@ -38,7 +39,7 @@ class Spymaster:
 
             count += 1
 
-        # return best_scores, best_clues, best_board_words_for_clue
+        print(best_scores, best_clues, best_board_words_for_clue)
         return best_clues[0], best_board_words_for_clue[0]
 
     def get_highest_blue_clue(self, chosen_words, penalty=1.0):
@@ -96,7 +97,7 @@ class Spymaster:
 
             count += 1
 
-        # return best_scores, best_clues, best_board_words_for_clue
+        print(best_scores, best_clues, best_board_words_for_clue)
         return best_clues[0], best_board_words_for_clue[0]
 
     def get_highest_red_clue(self, chosen_words, penalty=1.0):
