@@ -5,6 +5,7 @@ services:
     image: ap7t/codenaimes-flask
     restart: always
     container_name: flask
+    tty: true
     volumes:
       - ./server:/app
     ports:
