@@ -7,7 +7,7 @@ class Word2Vec:
     def __init__(self):
         # filename = "GoogleNews-vectors-negative300.bin"
         filename = "data/GoogleNews-vectors-negative300.bin"
-        self.model = KeyedVectors.load_word2vec_format(filename, binary=True)
+        self.model = KeyedVectors.load_word2vec_format(filename, binary=True, limit = 500000)
         
     def get_weighted_nn(self, word, n=500):
         nn_w_similarities = {}
