@@ -43,7 +43,7 @@ class Word2Vec:
 
     def get_word_similarity(self, word1, word2):
         try:
-            return 2.0
+            return self.model.similarity(word1, word2)
         except KeyError:
             return -1.0
 

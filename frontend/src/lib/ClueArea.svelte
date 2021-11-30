@@ -8,6 +8,7 @@
 	import Snackbar, { Actions, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
 	import CircularProgress from "@smui/circular-progress";
+	import { set_svg_attributes } from "svelte/internal";
 
 	let clue;
 	// let clues = ["test 4", "test 4", "test 4", "test 4"];
@@ -17,6 +18,7 @@
 	let prevClue = "";
 	let lastGo = "red";
 	let visible = false;
+	let hasMoved = false;
 
 	let gameId = $page.params.id;
 	$: whosTurn = $state.round % 2 == 0 ? "red" : "blue";
@@ -51,13 +53,21 @@
 		let data = { gameId: gameId, team: whosTurn };
 		socket.emit("request-clue", data);
 		visible = true;
+		hasMoved = true;
 	}
 	let alreadyRequestedClueSnackbar: SnackbarComponentDev;
 </script>
 
 <div class="scrollHider">
 	<h1>Clues</h1>
-	<!-- {#if visible}
+	<div>
+		{#if canMove}
+		<Button on:click={requestClue}>
+			<Label>Request clue</Label>
+		</Button>
+		{/if}
+	</div>
+	{#if visible}
 		<div style="display: flex; justify-content: center">
 			<CircularProgress
 				class="my-four-colors"
@@ -66,15 +76,7 @@
 				fourColor
 			/>
 		</div>
-	{/if} -->
-	<div>
-		<!-- {#if canMove && !visible} -->
-		{#if canMove}
-			<Button on:click={requestClue}>
-				<Label>Request clue</Label>
-			</Button>
-		{/if}
-	</div>
+	{/if}
 	<div id="clues" bind:this={div}>
 		{#each clues as clue, i}
 			<p in:fade class={clue.team.toLowerCase()}>{clue.clue}</p>

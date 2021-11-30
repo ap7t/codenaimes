@@ -15,7 +15,7 @@
 
 	let gameId = $page.params.id;
 
-	let name = "dev";
+	let name = "";
 	let redblue = "Red";
 	let role = "Operative";
 	let open = false;

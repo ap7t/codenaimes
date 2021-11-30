@@ -59,8 +59,7 @@
 
 {#if visible}
 	<div style="display: flex; justify-content: center">
-		<h1>Please wait while we create the AI spymaster</h1>
-		<small>May take up to 2 minutes</small>
+		<small>Please wait while we create the AI spymaster</small>
 		<CircularProgress
 			class="my-four-colors"
 			style="height: 32px; width: 32px;"

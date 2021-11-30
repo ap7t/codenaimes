@@ -9,6 +9,7 @@ from ai.word2vec import Word2Vec
 from ai.spymaster import Spymaster
 import time
 
+
 # Flask
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "changeme"

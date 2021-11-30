@@ -11,10 +11,17 @@ class Spymaster:
         self.embedding = word2vec
         self.weighted_nn = dict()
         self.stemmer = PorterStemmer()
+        self.used_clues = []
         for word in self.words:
             self.weighted_nn[word] = self.embedding.get_weighted_nn(word)
 
     def generate_blue_clue(self, n, penalty, remaining_agents):
+        if len(remaining_agents) == 1:
+            potentials = self.embedding.model.most_similar(positive=remaining_agents, topn=10)
+            for pot in potentials:
+                if self.is_valid_clue(pot) and "_" not in pot:
+                    return pot, remaining_agents
+
         pq = []
 
 
@@ -29,6 +36,8 @@ class Spymaster:
 
         while pq:
             score, clues, word_set = heapq.heappop(pq)
+            while clues in best_clues:
+                score, clues, word_set = heapq.heappop(pq)
 
             if count >= 5:
                 break
@@ -39,8 +48,10 @@ class Spymaster:
 
             count += 1
 
-        # print(best_scores, best_clues, best_board_words_for_clue)
-        return best_clues[0], best_board_words_for_clue[0]
+        for clue, words in zip(best_clues, best_board_words_for_clue): 
+            if clue not in self.used_clues:
+                self.used_clues.append(clue)
+                return (clue, words)
 
     def get_highest_blue_clue(self, chosen_words, penalty=1.0):
         potential_clues = set()
@@ -57,7 +68,6 @@ class Spymaster:
             blue_word_counts = []
             for blue_word in chosen_words:
                 if clue in self.weighted_nn[blue_word]:
-                    print(clue, blue_word, len(self.weighted_nn[blue_word]), self.weighted_nn[blue_word][clue])
                     blue_word_counts.append(self.weighted_nn[blue_word][clue])
                 else:
                     blue_word_counts.append(self.embedding.get_word_similarity(blue_word, clue))
@@ -76,6 +86,12 @@ class Spymaster:
         return highest_scoring_clues, highest_score
 
     def generate_red_clue(self, n, penalty, remaining_agents):
+        if len(remaining_agents) == 1:
+            potentials = self.embedding.model.most_similar(positive=remaining_agents, topn=10)
+            for pot in potentials:
+                if self.is_valid_clue(pot) and "_" not in pot:
+                    return pot, remaining_agents
+            
         pq = []
 
         for word_set in itertools.combinations(remaining_agents, n):
@@ -89,6 +105,8 @@ class Spymaster:
 
         while pq:
             score, clues, word_set = heapq.heappop(pq)
+            while clues in best_clues:
+                score, clues, word_set = heapq.heappop(pq)
 
             if count >= 5:
                 break
@@ -99,8 +117,11 @@ class Spymaster:
 
             count += 1
 
-        print(best_scores, best_clues, best_board_words_for_clue)
-        return best_clues[0], best_board_words_for_clue[0]
+        for clue, words in zip(best_clues, best_board_words_for_clue): 
+            if clue not in self.used_clues:
+                self.used_clues.append(clue)
+                return (clue, words)
+
 
     def get_highest_red_clue(self, chosen_words, penalty=1.0):
         potential_clues = set()
@@ -124,8 +145,8 @@ class Spymaster:
             embedding_score = self.embedding.penalise(chosen_words, clue, self.blue_words)
             score = sum(red_word_counts) + embedding_score
 
-            
             if score > highest_score:
+
                 highest_scoring_clues = [clue]
                 highest_score = score
             elif score == highest_score:
