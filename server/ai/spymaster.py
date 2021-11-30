@@ -16,7 +16,7 @@ class Spymaster:
 
     def generate_blue_clue(self, n, penalty, remaining_agents):
         pq = []
-        
+
 
         for word_set in itertools.combinations(remaining_agents, n):
             highest_clues, score = self.get_highest_blue_clue(word_set, penalty)
@@ -57,6 +57,7 @@ class Spymaster:
             blue_word_counts = []
             for blue_word in chosen_words:
                 if clue in self.weighted_nn[blue_word]:
+                    print(clue, blue_word, len(self.weighted_nn[blue_word]), self.weighted_nn[blue_word][clue])
                     blue_word_counts.append(self.weighted_nn[blue_word][clue])
                 else:
                     blue_word_counts.append(self.embedding.get_word_similarity(blue_word, clue))
