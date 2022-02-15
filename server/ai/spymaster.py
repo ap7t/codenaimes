@@ -17,10 +17,7 @@ class Spymaster:
 
     def generate_blue_clue(self, n, penalty, remaining_agents):
         if len(remaining_agents) == 1:
-            potentials = self.embedding.model.most_similar(positive=remaining_agents, topn=10)
-            for pot in potentials:
-                if self.is_valid_clue(pot) and "_" not in pot:
-                    return pot, remaining_agents
+            return self.get_most_similar(remaining_agents)
 
         pq = []
 
@@ -33,8 +30,12 @@ class Spymaster:
         best_board_words_for_clue = []
         best_scores = []
         count = 0
-
+        i = 0 
         while pq:
+            print("pq: ", pq)
+            print(i)
+            i + 1
+            print()
             score, clues, word_set = heapq.heappop(pq)
             while clues in best_clues:
                 score, clues, word_set = heapq.heappop(pq)
@@ -85,12 +86,16 @@ class Spymaster:
         
         return highest_scoring_clues, highest_score
 
+    def get_most_similar(self, words):
+        potentials = self.embedding.model.most_similar(positive=words, topn=10)
+        for clue in potentials:
+            if self.is_valid_clue(clue) and "_" not in clue:
+                return clue, words
+            
+
     def generate_red_clue(self, n, penalty, remaining_agents):
         if len(remaining_agents) == 1:
-            potentials = self.embedding.model.most_similar(positive=remaining_agents, topn=10)
-            for pot in potentials:
-                if self.is_valid_clue(pot) and "_" not in pot:
-                    return pot, remaining_agents
+            return self.get_most_similar(remaining_agents)
             
         pq = []
 
@@ -115,8 +120,9 @@ class Spymaster:
             best_scores.append(score)
             best_board_words_for_clue.append(word_set)
 
-            count += 1
+            count += 1 
 
+        print(zip(best_clues, best_board_words_for_clue))
         for clue, words in zip(best_clues, best_board_words_for_clue): 
             if clue not in self.used_clues:
                 self.used_clues.append(clue)

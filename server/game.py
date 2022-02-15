@@ -127,7 +127,6 @@ class Game:
         agents = self.red_agents if team == "red" else self.blue_agents
         return  [a for a in agents if not self.board[a.upper()]]
 
-
     def __str__(self):
         return str(self.solution)
 

@@ -104,6 +104,7 @@ def join(data):
     gameId = data
     join_room(gameId)
     game = ROOMS[gameId]
+    print(game.solution)
     # get the game that is associated with the room here
     emit("before-join", game.to_json(), room=gameId)
 
@@ -185,6 +186,14 @@ def ai_user_join(data):
     emit("user_join", user.__dict__, room=data["gameId"])
     emit("send-state", game.to_json(), room=data["gameId"])
 
+@socket.on("refresh")
+def refresh(gameId):
+    print("refreshing")
+    game = ROOMS[gameId]
+    game.over = False
+    game.create_game()
+    emit("send-state", game.to_json(), room=gameId)
+
 @socket.on("user_leave") 
 def user_leave(data):
     game = ROOMS[data["gameId"]]
@@ -193,4 +202,4 @@ def user_leave(data):
     emit("send-state", game.to_json(), room=data["gameId"])
     
 if __name__ == "__main__":
-    socket.run(app, host='0.0.0.0', port=5000, debug=False)
+    socket.run(app, host='0.0.0.0', port=5000, debug=True)
