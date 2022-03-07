@@ -62,6 +62,10 @@
 		};
 		socket.emit("user_leave", data);
 	});
+
+	function refresh() {
+		socket.emit("refresh", $state.gameId);
+	}
 </script>
 
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
@@ -69,10 +73,10 @@
 	<Title id="simple-title">{winner} Won</Title>
 	<Content id="simple-content">{winningMsg}</Content>
 	<Actions>
-		<Button on:click={() => (clicked = "No")}>
+		<Button on:click={refresh}>
 			<Label>No</Label>
 		</Button>
-		<Button on:click={() => (clicked = "Yes")}>
+		<Button on:click={refresh}>
 			<Label>Yes</Label>
 		</Button>
 	</Actions>

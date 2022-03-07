@@ -14,4 +14,11 @@ username.subscribe((val) => browser && localStorage.setItem("username", val));
 
 export const state = writable({});
 
+export const expId = writable();
+
+export const word1 = writable();
+export const word2 = writable();
+export const word3 = writable();
+export const word4 = writable();
+
     

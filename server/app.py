@@ -8,6 +8,8 @@ import pickle
 from ai.word2vec import Word2Vec
 from ai.spymaster import Spymaster
 import time
+from experiment import Experiment
+import pickle
 
 
 # Flask
@@ -29,6 +31,7 @@ print("made word2vec")
 ACTIVE_USERS = -1 # app counts as a connection???
 ROOMS = {}
 AI_ROOMS = {}
+EXPERIMENTS = {}
 
 @app.route("/rand")
 def rand():
@@ -200,6 +203,73 @@ def user_leave(data):
     user = game.delete_user(request.sid)
     emit("user_leave", user.__dict__, room=data["gameId"])
     emit("send-state", game.to_json(), room=data["gameId"])
+
+# ##########
+# Experiment
+# ##########
+@socket.on("experiment-create")
+def experiment_create(expId):
+    print("##### making experiment #####")
+    print("expId: ", expId)
+    e = Experiment(expId, word2vec)
+    EXPERIMENTS[expId] = e
+    # e.generate_clue()
+    # emit("send-experiment", data, room=request.sid)
+    print("sending exp")
+    emit("before-experiment-join", e.game.to_json(), room=request.sid)
+
+@socket.on("experiment")
+def experiment(expId):
+    e = EXPERIMENTS[expId]
+    clue = e.generate_clue()
+    print("clue: ", clue)
+    print("sending-clue")
+    emit("send-experiment", clue, room=request.sid)
+
+@socket.on("send-answer")
+def send_experiment(data):
+    print(data)
+    e = EXPERIMENTS[data["expId"]]
+    e.make_guess(data["word1"], data["word2"], data["word3"], data["word4"])
+    clue = e.generate_clue()
+    print(e.game.board)
+    print(zip(e.clues, e.guesses))
+    emit("send-experiment", clue, room=request.sid)
+    
+
+@socket.on("experiment-create-spymaster")
+def experiment_create_spymaster(expId):
+    e = EXPERIMENTS[expId]
+    print(">>> yes")
+    emit("before-experiment-join-spymaster", e.game2.to_json(), room=request.sid)
+
+@socket.on("experiment-spymaster")
+def experiment(expId):
+    e = EXPERIMENTS[expId]
+    words = e.generate_spymaster_words()
+    print("words: ", words)
+    print("sending-clue")
+    data = {"word1": words[0], "word2": words[1]}
+    print(f"data: {data}")
+    emit("send-experiment-spymaster", data, room=request.sid)
+
+
+@socket.on("send-answer-spymaster")
+def send_experiment(data):
+    print(data)
+    e = EXPERIMENTS[data["expId"]]
+    e.take_spymaster_clue(data["clue"])
+    words = e.generate_spymaster_words()
+    print("clue: ", words)
+    data = {"word1": words[0], "word2": words[1]}
+    print(f"data: {data}")
+    emit("send-experiment-spymaster", data, room=request.sid)
+
+@socket.on("save-experiment")
+def save_experiment(expId):
+    e = EXPERIMENTS[expId]
+    with open(f"results/{e.id}.pkl", "wb") as f:
+        pickle.dump(e, f)
     
 if __name__ == "__main__":
     socket.run(app, host='0.0.0.0', port=5000, debug=True)

@@ -14,7 +14,7 @@ class Spymaster:
         self.used_clues = []
         for word in self.words:
             self.weighted_nn[word] = self.embedding.get_weighted_nn(word)
-
+ 
     def generate_blue_clue(self, n, penalty, remaining_agents):
         if len(remaining_agents) == 1:
             return self.get_most_similar(remaining_agents)
@@ -32,7 +32,7 @@ class Spymaster:
         count = 0
         i = 0 
         while pq:
-            print("pq: ", pq)
+            # print("pq: ", pq)
             print(i)
             i + 1
             print()

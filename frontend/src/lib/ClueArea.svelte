@@ -8,7 +8,6 @@
 	import Snackbar, { Actions, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
 	import CircularProgress from "@smui/circular-progress";
-	import { set_svg_attributes } from "svelte/internal";
 
 	let clue;
 	// let clues = ["test 4", "test 4", "test 4", "test 4"];
@@ -62,9 +61,9 @@
 	<h1>Clues</h1>
 	<div>
 		{#if canMove}
-		<Button on:click={requestClue}>
-			<Label>Request clue</Label>
-		</Button>
+			<Button on:click={requestClue}>
+				<Label>Request clue</Label>
+			</Button>
 		{/if}
 	</div>
 	{#if visible}
