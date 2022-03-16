@@ -45,7 +45,7 @@ class Experiment:
         return correct
 
 
-    def get_percision(self):
+    def get_precision(self):
         total = 0
         correct = 0
         for i in range(len(self.guesses)):

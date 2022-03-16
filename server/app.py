@@ -6,6 +6,7 @@ from user import User
 import random
 import pickle
 from ai.word2vec import Word2Vec
+from ai.glove import Glove
 from ai.spymaster import Spymaster
 import time
 from experiment import Experiment
@@ -25,6 +26,11 @@ word2vec = Word2Vec()
 print("made word2vec")
 # with open("./ai/word2vec.obj", "rb") as f:
     # word2vec = pickle.load(f)
+
+#GloVe
+glove = Glove()
+print("made glove")
+# with open("./ai/word2vec.obj", "rb") as f:
 
 
 

@@ -1,0 +1,30 @@
+[1m[31mLocal data is older than two weeks, use --update to update it.
+
+[39m[22m
+[1m[39mscp
+[22m[39m
+[39mSecure copy.[22m[39m
+[39mCopy files between hosts using Secure Copy Protocol over SSH.[22m[39m
+[39mMore information: <https://man.openbsd.org/scp>.[22m[39m
+[32m
+- Copy a local file to a remote host:[22m[39m
+[31m    scp [22m[39m[34mpath/to/local_file[39m[31m [22m[39m[34mremote_host[39m[31m:[22m[39m[34mpath/to/remote_file[39m[31m[22m[39m
+[32m
+- Use a specific port when connecting to the remote host:[22m[39m
+[31m    scp -P [22m[39m[34mport[39m[31m [22m[39m[34mpath/to/local_file[39m[31m [22m[39m[34mremote_host[39m[31m:[22m[39m[34mpath/to/remote_file[39m[31m[22m[39m
+[32m
+- Copy a file from a remote host to a local directory:[22m[39m
+[31m    scp [22m[39m[34mremote_host[39m[31m:[22m[39m[34mpath/to/remote_file[39m[31m [22m[39m[34mpath/to/local_directory[39m[31m[22m[39m
+[32m
+- Recursively copy the contents of a directory from a remote host to a local directory:[22m[39m
+[31m    scp -r [22m[39m[34mremote_host[39m[31m:[22m[39m[34mpath/to/remote_directory[39m[31m [22m[39m[34mpath/to/local_directory[39m[31m[22m[39m
+[32m
+- Copy a file between two remote hosts transferring through the local host:[22m[39m
+[31m    scp -3 [22m[39m[34mhost1[39m[31m:[22m[39m[34mpath/to/remote_file[39m[31m [22m[39m[34mhost2[39m[31m:[22m[39m[34mpath/to/remote_directory[39m[31m[22m[39m
+[32m
+- Use a specific username when connecting to the remote host:[22m[39m
+[31m    scp [22m[39m[34mpath/to/local_file[39m[31m [22m[39m[34mremote_username[39m[31m@[22m[39m[34mremote_host[39m[31m:[22m[39m[34mpath/to/remote_directory[39m[31m[22m[39m
+[32m
+- Use a specific ssh private key for authentication with the remote host:[22m[39m
+[31m    scp -i [22m[39m[34m~/.ssh/private_key[39m[31m [22m[39m[34mlocal_file[39m[31m [22m[39m[34mremote_host[39m[31m:[22m[39m[34m/path/remote_file[39m[31m[22m[39m
+
