@@ -20,6 +20,8 @@
 	let visible = false;
 	let hasMoved = false;
 
+	export let ai = false;
+
 	let gameId = $page.params.id;
 	$: whosTurn = $state.round % 2 == 0 ? "red" : "blue";
 	$: canMove =
@@ -61,10 +63,10 @@
 <div class="scrollHider">
 	<h1>Clues</h1>
 	<div>
-		{#if canMove}
-		<Button on:click={requestClue}>
-			<Label>Request clue</Label>
-		</Button>
+		{#if canMove && false}
+			<Button on:click={requestClue}>
+				<Label>Request clue</Label>
+			</Button>
 		{/if}
 	</div>
 	{#if visible}

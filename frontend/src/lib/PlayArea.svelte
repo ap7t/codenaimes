@@ -17,7 +17,7 @@
 		<!-- {/if} -->
 	</div>
 	<div class="game">
-		<GameStats {spymaster} {ai}/>
+		<GameStats {spymaster} {ai} />
 		<GameBoard {spymaster} {ai} />
 	</div>
 	<div class="side">
