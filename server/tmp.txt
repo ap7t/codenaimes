@@ -1,0 +1,28 @@
+--- File: results/9928df31-5ae0-4941-9042-8aa00fc035db.pkl ---
++--- Phase 1 ---+
++ Clue:         + dolphin              + legislation          + week                 + dinnerware          +
++ Expected:     + unicorn | whale      + police | bill        + day | date           + glove | china       +
++ Top 2:        + whale | unicorn      + bill | police        + date | day           + fork | table        +
++ Bottom 2:     + __ | __              + __ | __              + __ | __              + __ | __             +
++ precision@2:  +                  1.0 +                  1.0 +                  1.0 +                  0.0+
++ recall@4:     +                  0.5 +                  0.5 +                  0.5 +                  0.0+
++--- Phase 2 ---+
++ Words:        + horse | centaur      + bed | nurse          + bomb | theater       + cross | washington   +
++ AI clue:      + stallion             + icu                  + explosives           + lincoln             +
++ Human clue:   + test                 + hospital             + explosive            + religion             +
++ Similarity:   +  0.06803034245967865 +                 -1.0 +   0.6154134273529053 +  0.14477086067199707 +
+
+--- File: results/00a3da35-3b32-4ef5-b422-39569ba79a65.pkl ---
++--- Phase 1 ---+
++ Clue:         + locomotive           + caramel              + thump                + rail                +
++ Expected:     + bolt | train         + chocolate | whip     + sound | whip         + train | green       +
++ Top 2:        + train | bolt         + chocolate | whip     + soldier | agent      + train | whip        +
++ Bottom 2:     + sound | america      + __ | __              + __ | __              + __ | __             +
++ precision@2:  +                  1.0 +                  1.0 +                  0.0 +                  0.5+
++ recall@4:     +                  0.5 +                  0.5 +                  0.0 +                 0.25+
++--- Phase 2 ---+
++ Words:        + doctor | lab         + organ | conductor    + spot | cat           + compound | bridge    +
++ AI clue:      + physician            + kuerti               + dog                  + causeway            +
++ Human clue:   + surgery              + train                + blind                + test                 +
++ Similarity:   +   0.3734774887561798 +                 -1.0 +  0.23226556181907654 + 0.004056158475577831 +
+

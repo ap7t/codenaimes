@@ -10,9 +10,9 @@ class Glove():
     def get_weighted_nn(self, word, n=500):
         nn_w_similarities = {}
 
-        if word not in self.glove_model.vocab:
+        if word not in self.model.vocab:
             return nn_w_similarities
-        neighbors_and_similarities = self.glove_model.most_similar(
+        neighbors_and_similarities = self.model.most_similar(
             word, topn=n)
         for neighbor, similarity in neighbors_and_similarities:
             if len(neighbor.split("_")) > 1 or len(neighbor.split("-")) > 1:
@@ -27,15 +27,15 @@ class Glove():
 
     def penalise(self, chosen_words, potential_clue, red_words):
         similarity = float("-inf")
-        if potential_clue not in self.glove_model:
+        if potential_clue not in self.model:
             if self.configuration.verbose:
                 print("Potential clue word ",
                       potential_clue, "not in glove model")
             return 0.0
 
         for red_word in red_words:
-            if red_word in self.glove_model:
-                similarity = self.glove_model.similarity(
+            if red_word in self.model:
+                similarity = self.model.similarity(
                     red_word, potential_clue)
                 if similarity > similarity:
                     similarity = similarity
@@ -52,6 +52,6 @@ class Glove():
 
     def get_word_similarity(self, word1, word2):
         try:
-            return self.glove_model.similarity(word1, word2)
+            return self.model.similarity(word1, word2)
         except KeyError:
             return -1.0

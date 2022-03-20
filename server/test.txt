@@ -1,0 +1,8 @@
+clue1,clue2,clue3
+word1,wrd2,word3
+ans1,ans2
+
+werw,werwe,werwe
+word1,wrd2,word3
+ans1,ans2
+

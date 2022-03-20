@@ -20,8 +20,8 @@
 	let clue = "";
 	let word1 = "";
 	let word2 = "";
-	// let count = 0;
-	let count = 3;
+	let count = 0;
+	// let count = 3;
 	let generating_clue = true;
 
 	$: if (count === 4) {

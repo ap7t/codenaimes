@@ -2,13 +2,15 @@ from gensim.models import KeyedVectors
 import itertools
 import operator
 
+
 class Word2Vec:
     # save to file to speed up things
     def __init__(self):
         # filename = "GoogleNews-vectors-negative300.bin"
         filename = "data/GoogleNews-vectors-negative300.bin"
-        self.model = KeyedVectors.load_word2vec_format(filename, binary=True, limit = 700000)
-        
+        self.model = KeyedVectors.load_word2vec_format(
+            filename, binary=True, limit=50000)
+
     def get_weighted_nn(self, word, n=500):
         nn_w_similarities = {}
 
@@ -18,24 +20,25 @@ class Word2Vec:
         for neighbour, similarity in neighbours_and_similarities:
             if len(neighbour.split("-")) > 1 or len(neighbour.split("-")) > 1:
                 continue
-            neighbour  = neighbour.lower()
+            neighbour = neighbour.lower()
             if neighbour not in nn_w_similarities:
                 nn_w_similarities[neighbour] = similarity
-            nn_w_similarities[neighbour] = max(similarity, nn_w_similarities[neighbour])
-            
-        return {k:v for k,v in nn_w_similarities.items() if k != word}
+            nn_w_similarities[neighbour] = max(
+                similarity, nn_w_similarities[neighbour])
+
+        return {k: v for k, v in nn_w_similarities.items() if k != word}
 
     def penalise(self, chosen_words, potential_clue, agents):
         max_similarity = float("-inf")
         if potential_clue not in self.model:
             return 0.0
-        
+
         for agent in agents:
             if agent in self.model:
                 similarity = self.model.similarity(agent, potential_clue)
                 if similarity > max_similarity:
                     max_similarity = similarity
-    
+
         return -0.5*max_similarity
 
     def dict2vec_embedding_weight(self):
@@ -46,7 +49,6 @@ class Word2Vec:
             return self.model.similarity(word1, word2)
         except KeyError:
             return -1.0
-
 
 
 if __name__ == "__main__":

@@ -50,6 +50,9 @@
 		socket.emit("send-answer", data);
 		word1 = "";
 		word2 = "";
+		word3 = "";
+		word4 = "";
+		generating_clue = true;
 		generating_clue = true;
 		count++;
 	}
