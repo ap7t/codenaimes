@@ -20,7 +20,7 @@
 </svelte:head>
 
 <div class="content" in:fade>
-	<h1>What's the big idea???</h1>
+	<h1>What's the big idea????</h1>
 	<p>This project was made as part of my Final Year Project in University College Cork.</p>
 	<p>
 		<strong>TODO:</strong> give info about me and Derek
