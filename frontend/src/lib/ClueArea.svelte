@@ -63,7 +63,7 @@
 <div class="scrollHider">
 	<h1>Clues</h1>
 	<div>
-		{#if canMove && false}
+		{#if canMove && ai}
 			<Button on:click={requestClue}>
 				<Label>Request clue</Label>
 			</Button>
