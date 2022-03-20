@@ -6,7 +6,7 @@
 	import HelperText from "@smui/textfield/helper-text/index";
 	import Dialog, { Title, Content, Actions } from "@smui/dialog";
 
-	let gameId = "dev";
+	// let gameId = "dev";
 	let gameId = "";
 	let open = false;
 	let ai = true;
