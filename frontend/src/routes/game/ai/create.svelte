@@ -8,7 +8,8 @@
 	import HelperText from "@smui/textfield/helper-text/index";
 	import Dialog, { Title, Content, Actions } from "@smui/dialog";
 
-	let gameId = "dev";
+	let gameId = "";
+	// let gameId = "dev";
 	let open = false;
 	let visible = false;
 
