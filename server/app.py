@@ -28,8 +28,8 @@ socket = SocketIO(app, cors_allowed_origins="*")
 # word2vec = pickle.load(f)
 
 # GloVe
-# glove = Glove()
-# print("made glove")
+glove = Glove()
+print("made glove")
 # with open("./ai/word2vec.obj", "rb") as f:
 
 
@@ -111,7 +111,7 @@ def ai_create_game(gameId):
         t = time.time()
         game = Game(gameId)
         spymaster = Spymaster(gameId, game.red_agents,
-                              game.blue_agents, word2vec)
+                              game.blue_agents, glove)
         AI_ROOMS[gameId] = {"game": game, "spymaster": spymaster}
         print("done making ai spymaster: ", (time.time() - t) / 60)
         emit("ai_create_game", room=request.sid)
@@ -237,7 +237,7 @@ def user_leave(data):
 def experiment_create(expId):
     print("##### making experiment #####")
     print("expId: ", expId)
-    e = Experiment(expId, word2vec)
+    e = Experiment(expId, glove)
     EXPERIMENTS[expId] = e
     # e.generate_clue()
     # emit("send-experiment", data, room=request.sid)
@@ -247,14 +247,18 @@ def experiment_create(expId):
 
 @socket.on("experiment")
 def experiment(expId):
+    print("1: ", request.sid)
     e = EXPERIMENTS[expId]
     clue = e.generate_clue()
-    print("clue: ", clue)
+    clue = [f"{clue[0]} 2"]
+
     print("sending-clue")
+
+    print("2: ", request.sid)
     emit("send-experiment", clue, room=request.sid)
 
 
-@socket.on("send-answer")
+@ socket.on("send-answer")
 def send_experiment(data):
     print(data)
     e = EXPERIMENTS[data["expId"]]
@@ -266,7 +270,7 @@ def send_experiment(data):
     emit("send-experiment", clue, room=request.sid)
 
 
-@socket.on("experiment-create-spymaster")
+@ socket.on("experiment-create-spymaster")
 def experiment_create_spymaster(expId):
     e = EXPERIMENTS[expId]
     print(">>> yes")
@@ -274,7 +278,7 @@ def experiment_create_spymaster(expId):
          e.game2.to_json(), room=request.sid)
 
 
-@socket.on("experiment-spymaster")
+@ socket.on("experiment-spymaster")
 def experiment(expId):
     e = EXPERIMENTS[expId]
     words = e.generate_spymaster_words()
@@ -285,7 +289,7 @@ def experiment(expId):
     emit("send-experiment-spymaster", data, room=request.sid)
 
 
-@socket.on("send-answer-spymaster")
+@ socket.on("send-answer-spymaster")
 def send_experiment(data):
     print(data)
     e = EXPERIMENTS[data["expId"]]
@@ -297,7 +301,7 @@ def send_experiment(data):
     emit("send-experiment-spymaster", data, room=request.sid)
 
 
-@socket.on("save-experiment")
+@ socket.on("save-experiment")
 def save_experiment(expId):
     e = EXPERIMENTS[expId]
     with open(f"results/{e.id}.pkl", "wb") as f:

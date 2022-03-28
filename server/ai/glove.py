@@ -4,14 +4,14 @@ from gensim.models import KeyedVectors
 class Glove():
 
     def __init__(self, configuration=None):
-        filename = "data/glove.840B.300d.txt"
-        self.model = KeyedVectors.load_word2vec_format(filename, limit=700000)
+        filename = "data/glove.6B.300d.txt"
+        self.model = KeyedVectors.load_word2vec_format(filename, limit=500000)
 
     def get_weighted_nn(self, word, n=500):
         nn_w_similarities = {}
 
-        if word not in self.model.vocab:
-            return nn_w_similarities
+        # if word not in self.model.vocab:
+        #     return nn_w_similarities
         neighbors_and_similarities = self.model.most_similar(
             word, topn=n)
         for neighbor, similarity in neighbors_and_similarities:
@@ -25,27 +25,19 @@ class Glove():
 
         return {k: v for k, v in nn_w_similarities.items() if k != word}
 
-    def penalise(self, chosen_words, potential_clue, red_words):
+    def penalise(self, chosen_words, potential_clue, agents):
         similarity = float("-inf")
+        max_similarity = float("-inf")
         if potential_clue not in self.model:
-            if self.configuration.verbose:
-                print("Potential clue word ",
-                      potential_clue, "not in glove model")
             return 0.0
 
-        for red_word in red_words:
-            if red_word in self.model:
-                similarity = self.model.similarity(
-                    red_word, potential_clue)
-                if similarity > similarity:
-                    similarity = similarity
+        for agent in agents:
+            if agent in self.model:
+                similarity = self.model.similarity(agent, potential_clue)
+                if similarity > max_similarity:
+                    max_similarity = similarity
 
-        if self.configuration.debug_file:
-            with open(self.configuration.debug_file, 'a') as f:
-                f.write(" ".join([str(x) for x in [
-                        " glove penalty for red words:", similarity, "\n"
-                        ]]))
-        return -0.5*similarity
+        return -0.5*max_similarity
 
     def dict2vec_embedding_weight(self):
         return 2.0

@@ -10,11 +10,11 @@ class Experiment:
     def __init__(self, id, embedding):
         self.embdedding = embedding
         self.id = id
-        self.game = Game(id)
+        self.game = Game(0)
         self.spymaster = Spymaster(
             id, self.game.red_agents, self.game.blue_agents, embedding)
 
-        self.game2 = Game(id)
+        self.game2 = Game(1)
         self.spymaster2 = Spymaster(
             id, self.game2.red_agents, self.game2.blue_agents, embedding)
 
@@ -95,7 +95,7 @@ class Experiment:
     def update_board(self):
         for clue in self.clues:
             first = clue[1][0].upper()
-            second = clue[1][0].upper()
+            second = clue[1][1].upper()
             if not self.game.board[first]:
                 self.game.flip_card(first)
             if not self.game.board[second]:
