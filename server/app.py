@@ -166,7 +166,7 @@ def request_clue(data):
     else:
         clue = spymaster.generate_blue_clue(
             2, 1, game.remaining_agents("blue"))
-    data["clue"] = [f"{clue[0]} 2"]
+    data["clue"] = [f"{clue[0][0]} 2"]
     print(f"Generated: {clue}")
     game.set_guesses(len(clue[1]) + 1)
     game.current_clue = clue[0]
