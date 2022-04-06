@@ -9,7 +9,7 @@
 	import Icon from "@smui/textfield/icon";
 
 	let prevClue = ""; 
-	let clue = "dev 4";
+	let clue = "";
 	let guesses;
 	let gameId = $page.params.id;
 

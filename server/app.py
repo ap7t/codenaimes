@@ -238,6 +238,7 @@ def refresh(gameId):
 
 @socket.on("user_leave")
 def user_leave(data):
+    
     game = ROOMS[data["gameId"]]
     user = game.delete_user(request.sid)
     emit("user_leave", user.__dict__, room=data["gameId"])

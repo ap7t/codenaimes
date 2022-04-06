@@ -11,7 +11,7 @@
 
 	export let spymaster = false;
 	export let ai = false;
-
+	console.log($state.gameId);
 	let open = false;
 	let winner;
 	let winningMsg;

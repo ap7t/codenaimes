@@ -12,7 +12,7 @@
 
 	let re = /^\w+ \d ?$/;
 	let prevClue = "";
-	let clue = "dev 4";
+	let clue = "";
 	let guesses;
 	let gameId = $page.params.id;
 	let open = false;
