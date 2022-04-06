@@ -8,7 +8,6 @@
 	import Snackbar, { Actions, SnackbarComponentDev } from "@smui/snackbar";
 	import IconButton from "@smui/icon-button";
 	import CircularProgress from "@smui/circular-progress";
-	import { set_svg_attributes } from "svelte/internal";
 
 	let clue;
 	// let clues = ["test 4", "test 4", "test 4", "test 4"];

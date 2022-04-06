@@ -14,6 +14,7 @@
 	"devDependencies": {
 		"@smui/button": "^5.0.0-beta.6",
 		"@smui/card": "^5.0.0-beta.6",
+		"@smui/checkbox": "^6.0.0-beta.15",
 		"@smui/dialog": "^5.0.0-beta.7",
 		"@smui/drawer": "^5.0.0-beta.7",
 		"@smui/layout-grid": "^5.0.0-beta.7",
@@ -46,6 +47,7 @@
 		"socket.io-client": "^4.2.0",
 		"svelte-material-ui": "^5.0.0-beta.6",
 		"svelte-preprocess": "^4.9.5",
-		"typescript": "^4.4.3"
+		"typescript": "^4.4.3",
+		"uuid": "^8.3.2"
 	}
 }

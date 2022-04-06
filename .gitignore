@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 
-GoogleNews*
-word2vec.obj
+server/results/*
+server/data/*

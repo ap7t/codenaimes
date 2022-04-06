@@ -27,6 +27,12 @@
 				<Label>Play</Label>
 			</Button>
 		</li>
+		<!-- <li>
+			<Button on:click={() => goto("/experiment")}>
+				<Icon class="material-icons">science</Icon>
+				<Label>Experiment</Label>
+			</Button>
+		</li> -->
 		<li>
 			<Button on:click={() => goto("/about")}>
 				<Icon class="material-icons">info</Icon>

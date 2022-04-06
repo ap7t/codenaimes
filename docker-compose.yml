@@ -8,6 +8,7 @@ services:
     tty: true
     volumes:
       - ./server:/app
+      - ./server/results:/app/results
     ports:
       - 5000:5000
     networks:

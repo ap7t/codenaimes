@@ -11,6 +11,7 @@
 	export let spymaster;
 	export let name;
 	export let ai;
+	export let toast = true;
 	let msg;
 
 	let classString = "agentCard";
@@ -91,33 +92,35 @@
 	}
 </script>
 
-<Snackbar bind:this={notYourTurnSnackbar} timeoutMs={4000}>
-	<Label>Hold your horses, it's not your turn!</Label>
-	<Actions>
-		<IconButton class="material-icons" title="Dismiss">close</IconButton>
-	</Actions>
-</Snackbar>
+{#if toast}
+	<Snackbar bind:this={notYourTurnSnackbar} timeoutMs={4000}>
+		<Label>Hold your horses, it's not your turn!</Label>
+		<Actions>
+			<IconButton class="material-icons" title="Dismiss">close</IconButton>
+		</Actions>
+	</Snackbar>
 
-<Snackbar bind:this={noClueSnackbar} timeoutMs={4000}>
-	<Label>Don't get ahead of yourself, the spymaster hasn't sent their clue yet!</Label>
-	<Actions>
-		<IconButton class="material-icons" title="Dismiss">close</IconButton>
-	</Actions>
-</Snackbar>
+	<Snackbar bind:this={noClueSnackbar} timeoutMs={4000}>
+		<Label>Don't get ahead of yourself, the spymaster hasn't sent their clue yet!</Label>
+		<Actions>
+			<IconButton class="material-icons" title="Dismiss">close</IconButton>
+		</Actions>
+	</Snackbar>
 
-<Snackbar bind:this={yourSpymasterSnackbar} timeoutMs={4000}>
-	<Label>Your the spymaster, you can't guess!</Label>
-	<Actions>
-		<IconButton class="material-icons" title="Dismiss">close</IconButton>
-	</Actions>
-</Snackbar>
+	<Snackbar bind:this={yourSpymasterSnackbar} timeoutMs={4000}>
+		<Label>Your the spymaster, you can't guess!</Label>
+		<Actions>
+			<IconButton class="material-icons" title="Dismiss">close</IconButton>
+		</Actions>
+	</Snackbar>
 
-<Snackbar bind:this={wrongCardSnackbar} timeoutMs={4000}>
-	<Label>{msg}</Label>
-	<Actions>
-		<IconButton class="material-icons" title="Dismiss">close</IconButton>
-	</Actions>
-</Snackbar>
+	<Snackbar bind:this={wrongCardSnackbar} timeoutMs={4000}>
+		<Label>{msg}</Label>
+		<Actions>
+			<IconButton class="material-icons" title="Dismiss">close</IconButton>
+		</Actions>
+	</Snackbar>
+{/if}
 
 <Card>
 	<PrimaryAction

@@ -1,34 +1,32 @@
 from gensim.models import KeyedVectors
-import itertools
-import operator
 
 
-class Word2Vec:
-    # save to file to speed up things
-    def __init__(self):
-        # filename = "GoogleNews-vectors-negative300.bin"
-        filename = "data/GoogleNews-vectors-negative300.bin"
-        self.model = KeyedVectors.load_word2vec_format(
-            filename, binary=True, limit=500000)
+class Glove():
+
+    def __init__(self, configuration=None):
+        filename = "data/glove.6B.300d.txt"
+        self.model = KeyedVectors.load_word2vec_format(filename, limit=500000)
 
     def get_weighted_nn(self, word, n=500):
         nn_w_similarities = {}
 
         # if word not in self.model.vocab:
         #     return nn_w_similarities
-        neighbours_and_similarities = self.model.most_similar(word, topn=n)
-        for neighbour, similarity in neighbours_and_similarities:
-            if len(neighbour.split("-")) > 1 or len(neighbour.split("-")) > 1:
+        neighbors_and_similarities = self.model.most_similar(
+            word, topn=n)
+        for neighbor, similarity in neighbors_and_similarities:
+            if len(neighbor.split("_")) > 1 or len(neighbor.split("-")) > 1:
                 continue
-            neighbour = neighbour.lower()
-            if neighbour not in nn_w_similarities:
-                nn_w_similarities[neighbour] = similarity
-            nn_w_similarities[neighbour] = max(
-                similarity, nn_w_similarities[neighbour])
+            neighbor = neighbor.lower()
+            if neighbor not in nn_w_similarities:
+                nn_w_similarities[neighbor] = similarity
+            nn_w_similarities[neighbor] = max(
+                similarity, nn_w_similarities[neighbor])
 
         return {k: v for k, v in nn_w_similarities.items() if k != word}
 
     def penalise(self, chosen_words, potential_clue, agents):
+        similarity = float("-inf")
         max_similarity = float("-inf")
         if potential_clue not in self.model:
             return 0.0
@@ -49,11 +47,3 @@ class Word2Vec:
             return self.model.similarity(word1, word2)
         except KeyError:
             return -1.0
-
-
-if __name__ == "__main__":
-    import pickle
-
-    w = Word2Vec()
-    with open("word2vec.obj", "wb") as f:
-        pickle.dump(w, f)

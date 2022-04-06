@@ -1,0 +1,70 @@
+--- File: results/57aa018f-8a2b-4bd7-aba9-5ec0ec374d99.pkl ---
++--- Phase 1 ---+
++ Clue:         + teeth                + pants                + continent            + leopard             +
++ Expected:     + nut | tooth          + suit | shoe          + africa | space       + lion | penguin      +
++ Top 2:        + tooth | mouth        + suit | shoe          + africa | lion        + lion | tooth        +
++ Bottom 2:     + ivory | lion         + model | day          + penguin | temple     + africa | suit       +
++ precision@2:  +                  0.5 +                  1.0 +                  0.5 +                  0.5+
++ recall@4:     +                 0.25 +                  0.5 +                 0.25 +                 0.25+
++--- Phase 2 ---+
++ Words:        + cat | back           + deck | wall          + leprechaun | degree  + pumpkin | van        +
++ AI clue:      + dog                  + roof                 + bachelor             + pie                 +
++ Human clue:   + stretch              + wood                 + money                + circle               +
++ Similarity:   +  0.15173384547233582 +   0.3943479061126709 +  0.06422577798366547 +   0.1601984053850174 +
+
+--- File: results/3246f235-0f0b-4fc6-b856-7cd8b62ae1ad.pkl ---
++--- Phase 1 ---+
++ Clue:         + mice                 + performances         + miguel               + assassinate         +
++ Expected:     + cat | mouse          + concert | shadow     + jack | angel         + plot | witch        +
++ Top 2:        + mouse | cat          + opera | concert      + knight | jack        + opera | forest      +
++ Bottom 2:     + ghost | forest       + plot | knight        + europe | fighter     + knight | smuggler   +
++ precision@2:  +                  1.0 +                  0.5 +                  0.5 +                  0.0+
++ recall@4:     +                  0.5 +                 0.25 +                 0.25 +                  0.0+
++--- Phase 2 ---+
++ Words:        + mexico | europe      + lemon | oil          + ambulance | pants    + smuggler | dragon    +
++ AI clue:      + america              + juice                + khaki                + smuggling           +
++ Human clue:   + spanish              + liquid               + flash                + treasure             +
++ Similarity:   +   0.2880539000034332 +   0.4380229413509369 +  0.02191753499209881 +  0.18594080209732056 +
+
+--- File: results/f0d7662f-5cc1-4c47-a79d-b855336d5252.pkl ---
++--- Phase 1 ---+
++ Clue:         + south                + animals              + mouse                + wooden              +
++ Expected:     + africa | australia   + fish | bear          + kangaroo | button    + yard | whip         +
++ Top 2:        + africa | australia   + bear | penguin       + cricket | australia  + cricket | yard      +
++ Bottom 2:     + ice | bear           + kangaroo | fish      + __ | __              + track | __          +
++ precision@2:  +                  1.0 +                  0.5 +                  0.0 +                  0.5+
++ recall@4:     +                  0.5 +                  0.5 +                  0.0 +                 0.25+
++--- Phase 2 ---+
++ Words:        + lap | pole           + trip | pilot         + green | australia    + forest | shadow      +
++ AI clue:      + schumacher           + flight               + zealand              + cloud               +
++ Human clue:   + stripper             + airline              + forests              + shaded               +
++ Similarity:   + 0.036419786512851715 +    0.617792010307312 +  0.16340452432632446 +   0.1820051670074463 +
+
+--- File: results/e8f672c2-66c5-48c9-ab3b-a7884d8d70cf.pkl ---
++--- Phase 1 ---+
++ Clue:         + feet                 + feces                + gardens              + sarus               +
++ Expected:     + face | foot          + sock | litter        + park | grace         + platypus | crane    +
++ Top 2:        + foot | sock          + millionare | lion    + park | crane         + nurse | ambulance   +
++ Bottom 2:     + litter | lion        + crane | platypus     + log | club           + ring | fork         +
++ precision@2:  +                  0.5 +                  0.0 +                  0.5 +                  0.0+
++ recall@4:     +                 0.25 +                  0.0 +                 0.25 +                  0.0+
++--- Phase 2 ---+
++ Words:        + gold | dress         + lead | key           + telescope | worm     + pie | plot           +
++ AI clue:      + silver               + crucial              + hubble               + cake                +
++ Human clue:   + frills               + essential            + space                + chart                +
++ Similarity:   + 0.003357117297127843 +   0.6232986450195312 +   0.4398641884326935 +  0.12685734033584595 +
+
+--- File: results/e19854cc-572e-429c-a026-84013225e979.pkl ---
++--- Phase 1 ---+
++ Clue:         + packaging            + legislation          + racquet              + hubble              +
++ Expected:     + plastic | paper      + europe | bill        + plate | racket       + vet | telescope     +
++ Top 2:        + post | paper         + bill | board         + racket | shot        + satellite | telescope+
++ Bottom 2:     + plastic | tag        + club | europe        + club | ground        + ground | mass       +
++ precision@2:  +                  0.5 +                  0.5 +                  0.5 +                  0.5+
++ recall@4:     +                  0.5 +                  0.5 +                 0.25 +                 0.25+
++--- Phase 2 ---+
++ Words:        + revolution | china   + compound | copper    + row | club           + mouth | kangaroo     +
++ AI clue:      + chinese              + zinc                 + football             + tongue              +
++ Human clue:   + coup                 + chemistry            + sport                + pouch                +
++ Similarity:   +  0.14360284805297852 +  0.12147816270589828 +   0.4551796317100525 +  0.14945943653583527 +
+
