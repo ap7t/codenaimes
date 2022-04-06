@@ -10,7 +10,9 @@ from ai.glove import Glove
 from ai.spymaster import Spymaster
 import time
 from experiment import Experiment
+from evaluation import Evaluation
 import pickle
+import os
 
 
 # Flask
@@ -28,8 +30,8 @@ socket = SocketIO(app, cors_allowed_origins="*")
 # word2vec = pickle.load(f)
 
 # GloVe
-glove = Glove()
-print("made glove")
+# glove = Glove()
+# print("made glove")
 # with open("./ai/word2vec.obj", "rb") as f:
 
 
@@ -37,6 +39,19 @@ ACTIVE_USERS = -1  # app counts as a connection???
 ROOMS = {}
 AI_ROOMS = {}
 EXPERIMENTS = {}
+EVALUATIONS = []
+
+files = [
+    f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
+
+for file in files:
+    with open(file, "rb") as f:
+        exp = pickle.load(f)
+        # print(f"--- File: {file} ---")
+        e = Evaluation(exp)
+        for b in e.e.game2.board:
+            e.e.game2.board[b] = False
+        EVALUATIONS.append(e)
 
 
 @app.route("/rand")
@@ -306,6 +321,72 @@ def save_experiment(expId):
     e = EXPERIMENTS[expId]
     with open(f"results/{e.id}.pkl", "wb") as f:
         pickle.dump(e, f)
+
+
+# ##########
+# Evaluation
+# ##########
+@socket.on("before-evaluation-join")
+def before_evaluation_join():
+    print("joining")
+    ind = 0
+    e = EVALUATIONS[ind]
+
+    data = {"game": e.e.game2.to_json()}
+
+    emit("before-evaluation-join", data, room=request.sid)
+
+
+@socket.on("evaluation")
+def evaluation(data):
+    gameInd = data["gameInd"]
+    clueInd = data["gameInd"]
+    e = EVALUATIONS[gameInd]
+    ai = e.get_ai_clues()[clueInd]
+    human = e.get_human_clues()[clueInd]
+    words = e.get_game_words()[clueInd]
+    clues = [ai, human]
+    random.shuffle(clues)
+
+    data = {"clues": clues, "words": words}
+    print("data below")
+    print(data)
+    print("sending, ", data)
+    emit("send-evaluation", data, room=request.sid)
+
+
+@socket.on("make-vote")
+def make_vote(data):
+    clueInd = data["clueInd"]
+    print(clueInd)
+    if clueInd < 4:
+        gameInd = data["gameInd"]
+        e = EVALUATIONS[gameInd]
+        e.make_vote(data["vote"])
+        ai = e.get_ai_clues()[clueInd]
+        human = e.get_human_clues()[clueInd]
+        words = e.get_game_words()[clueInd]
+        clues = [ai, human]
+        random.shuffle(clues)
+
+        data = {"clues": clues, "words": words}
+
+        emit("send-evaluation", data, room=request.sid)
+    else:
+        gameInd = data["gameInd"]
+        clueInd = 0
+        e = EVALUATIONS[gameInd]
+        ai = e.get_ai_clues()[clueInd]
+        human = e.get_human_clues()[clueInd]
+        words = e.get_game_words()[clueInd]
+        clues = [ai, human]
+        random.shuffle(clues)
+        print()
+        print("game:", e.e.game2.to_json())
+        print()
+
+        data = {"clues": clues, "words": words, "game": e.e.game2.to_json()}
+        emit("evaluation-next-game", data, room=request.sid)
 
 
 if __name__ == "__main__":

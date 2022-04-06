@@ -20,8 +20,8 @@
 	let word3 = "";
 	let word4 = "";
 	let clue = "test";
-	// let count = 0;
-	let count = 3;
+	let count = 0;
+	// let count = 4;
 
 	$: if (count === 4) {
 		socket.emit("experiment-create-spymaster", $expId);
