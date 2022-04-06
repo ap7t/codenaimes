@@ -30,8 +30,8 @@ socket = SocketIO(app, cors_allowed_origins="*")
 # word2vec = pickle.load(f)
 
 # GloVe
-# glove = Glove()
-# print("made glove")
+glove = Glove()
+print("made glove")
 # with open("./ai/word2vec.obj", "rb") as f:
 
 
