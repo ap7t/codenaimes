@@ -8,6 +8,7 @@
 	import LayoutGrid, { Cell, InnerGrid } from "@smui/layout-grid";
 	import GameStats from "./GameStats.svelte";
 	import { onMount, onDestroy } from "svelte";
+	import { goto } from "$app/navigation";
 
 	export let spymaster = false;
 	export let ai = false;
@@ -63,8 +64,12 @@
 		socket.emit("user_leave", data);
 	});
 
-	function refresh() {
-		socket.emit("refresh", $state.gameId);
+	function refresh(str) {
+		if (str === "yes") {
+			socket.emit("refresh ", $state.gameId);
+		} else {
+			goto("/");
+		}
 	}
 </script>
 
@@ -73,10 +78,10 @@
 	<Title id="simple-title">{winner} Won</Title>
 	<Content id="simple-content">{winningMsg}</Content>
 	<Actions>
-		<Button on:click={refresh}>
+		<Button on:click={() => refresh("no")}>
 			<Label>No</Label>
 		</Button>
-		<Button on:click={refresh}>
+		<Button on:click={() => refresh("yes")}>
 			<Label>Yes</Label>
 		</Button>
 	</Actions>

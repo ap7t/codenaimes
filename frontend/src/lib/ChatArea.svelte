@@ -42,6 +42,7 @@
 			spymaster: spymaster,
 			role: role
 		};
+		console.log("sending message");
 		socket.emit("message", data);
 		message = "";
 	};

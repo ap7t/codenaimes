@@ -70,6 +70,7 @@ def message(data):
     # netsoc cloud time in utc, maybe use some js lib for showing time on frontend
     data["timestamp"] = (datetime.today() +
                          timedelta(hours=1)).strftime("%H:%M")
+    print("sending message")
     emit("message", data, room=data["gameId"])
 
 
@@ -238,7 +239,7 @@ def refresh(gameId):
 
 @socket.on("user_leave")
 def user_leave(data):
-    
+
     game = ROOMS[data["gameId"]]
     user = game.delete_user(request.sid)
     emit("user_leave", user.__dict__, room=data["gameId"])

@@ -79,7 +79,7 @@
 					msg = "Oof, that's a red agent, moving onto the next round";
 					break;
 				case "O":
-					msg = "Oof, that's a civilian, moving onto the next roun''d";
+					msg = "Oof, that's a civilian, moving onto the next round";
 					break;
 			}
 			wrongCardSnackbar.open();
