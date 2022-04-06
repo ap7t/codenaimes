@@ -41,8 +41,8 @@ AI_ROOMS = {}
 EXPERIMENTS = {}
 EVALUATIONS = []
 
-files = [
-    f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
+# files = [
+#     f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
 
 for file in files:
     with open(file, "rb") as f:
@@ -319,8 +319,8 @@ def send_experiment(data):
 @ socket.on("save-experiment")
 def save_experiment(expId):
     e = EXPERIMENTS[expId]
-    with open(f"results/{e.id}.pkl", "wb") as f:
-        pickle.dump(e, f)
+    # with open(f"results/{e.id}.pkl", "wb") as f:
+    #     pickle.dump(e, f)
 
 
 # ##########
