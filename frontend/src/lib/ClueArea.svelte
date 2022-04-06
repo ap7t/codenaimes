@@ -18,6 +18,7 @@
 	let lastGo = "red";
 	let visible = false;
 	let hasMoved = false;
+	let lastRound = -1;
 
 	export let ai = false;
 
@@ -55,6 +56,7 @@
 		socket.emit("request-clue", data);
 		visible = true;
 		hasMoved = true;
+		lastRound = $state.round;
 	}
 	let alreadyRequestedClueSnackbar: SnackbarComponentDev;
 </script>
@@ -62,7 +64,7 @@
 <div class="scrollHider">
 	<h1>Clues</h1>
 	<div>
-		{#if canMove && ai}
+		{#if canMove && ai && $state.round > lastRound}
 			<Button on:click={requestClue}>
 				<Label>Request clue</Label>
 			</Button>
