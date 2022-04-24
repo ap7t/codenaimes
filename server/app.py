@@ -39,17 +39,17 @@ AI_ROOMS = {}
 EXPERIMENTS = {}
 EVALUATIONS = []
 
-files = [
-    f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
+# files = [
+#     f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
 
-for file in files:
-    with open(file, "rb") as f:
-        exp = pickle.load(f)
-        # print(f"--- File: {file} ---")
-        e = Evaluation(exp)
-        for b in e.e.game2.board:
-            e.e.game2.board[b] = False
-        EVALUATIONS.append(e)
+# for file in files:
+#     with open(file, "rb") as f:
+#         exp = pickle.load(f)
+#         # print(f"--- File: {file} ---")
+#         e = Evaluation(exp)
+#         for b in e.e.game2.board:
+#             e.e.game2.board[b] = False
+#         EVALUATIONS.append(e)
 
 
 @app.route("/rand")
