@@ -24,7 +24,6 @@
 + Words:        + mexico | europe      + lemon | oil          + ambulance | pants    + smuggler | dragon    +
 + AI clue:      + america              + juice                + khaki                + smuggling           +
 + Human clue:   + spanish              + liquid               + flash                + treasure             +
-+ Similarity:   +   0.2880539000034332 +   0.4380229413509369 +  0.02191753499209881 +  0.18594080209732056 +
 
 --- File: results/f0d7662f-5cc1-4c47-a79d-b855336d5252.pkl ---
 +--- Phase 1 ---+

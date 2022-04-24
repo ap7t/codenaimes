@@ -14,18 +14,18 @@
 	let uuid = "";
 
 	function join() {
-		// uuid = uuidv4();
-		// $expId = uuid;
-		// socket.emit("experiment-create", uuid);
-
-		socket.emit("before-evaluation-join");
+		uuid = uuidv4();
+		$expId = uuid;
+		socket.emit("experiment-create", uuid);
+		// console.log("emitting");
+		// socket.emit("before-evaluation-join");
 	}
 
-	// socket.on("before-experiment-join", function (game) {
-	socket.on("before-evaluation-join", function (data) {
-		console.log(data.game);
-		$state = data.game;
-		goto("/experiment/evaluation/");
+	socket.on("before-experiment-join", function (data) {
+		// socket.on("before-evaluation-join", function (data) {
+		console.log(data);
+		$state = data;
+		goto("/experiment/operative/");
 	});
 </script>
 

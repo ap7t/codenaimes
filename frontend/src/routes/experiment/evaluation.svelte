@@ -10,6 +10,7 @@
 	import { goto } from "$app/navigation";
 	import GameBoard from "$lib/GameBoard.svelte";
 	import Card, { PrimaryAction } from "@smui/card";
+	import Dialog, { Title, Content, Actions } from "@smui/dialog";
 
 	let open = false;
 	let winner;
@@ -22,11 +23,16 @@
 	let classString = "agentCard";
 	// let count = 4;
 
-	$: if (clueInd === 4 && gameInd < 4) {
+	$: if (clueInd > 4 && gameInd === 5) {
+		socket.emit("save-evaluation");
+		console.log("saving");
+		open = true;
+	}
+
+	$: if (clueInd === 4 && gameInd < 5) {
 		gameInd++;
 		let data = { ind: gameInd };
 		socket.emit("evaluation-next-game", data);
-		console.log("getting new game");
 	}
 
 	onMount(() => {
@@ -35,15 +41,12 @@
 	});
 
 	socket.on("send-evaluation", function (data) {
-		console.log(data.clues);
-		console.log(data.words);
 		clues = data.clues;
 		words = data.words;
 	});
 
 	socket.on("evaluation-next-game", function (data) {
 		clueInd = 1;
-		console.log(data.game);
 		$state = data.game;
 		words = data.words;
 		clues = data.clues;
@@ -71,8 +74,8 @@
 	<div class="agentsGrid">
 		{#if $state != {}}
 			{#each Object.entries($state.solution) as [name, col], _}
-				{name}
-				{col}
+				<!-- {name}
+				{col} -->
 				<AgentCard {name} colour={col} spymaster={true} ai={false} toast={false} />
 			{/each}
 		{/if}
@@ -88,11 +91,24 @@
 		</PrimaryAction>
 	</Card>
 	<Card>
-		<PrimaryAction on:click={() => makeVote(clues[0])} padded class={classString}>
+		<PrimaryAction on:click={() => makeVote(clues[1])} padded class={classString}>
 			<span> {clues[1]}</span>
 		</PrimaryAction>
 	</Card>
 </div>
+
+<Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
+	<!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+	<Title id="simple-title">Thank you</Title>
+	<Content id="simple-content"
+		>Your responses have been saved, thank you for taking the time to do this experiment!</Content
+	>
+	<Actions>
+		<Button on:click={() => goto("/")}>
+			<Label>No problem!</Label>
+		</Button>
+	</Actions>
+</Dialog>
 
 <style>
 	.agentsGrid {

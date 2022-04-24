@@ -2,6 +2,7 @@ import itertools
 import heapq
 from nltk.stem import PorterStemmer
 
+
 class Spymaster:
     def __init__(self, id, red_words, blue_words, word2vec):
         self.id = id
@@ -12,25 +13,26 @@ class Spymaster:
         self.weighted_nn = dict()
         self.stemmer = PorterStemmer()
         self.used_clues = []
+        self.history = ""
         for word in self.words:
             self.weighted_nn[word] = self.embedding.get_weighted_nn(word)
- 
+
     def generate_blue_clue(self, n, penalty, remaining_agents):
         if len(remaining_agents) == 1:
             return self.get_most_similar(remaining_agents)
 
         pq = []
 
-
         for word_set in itertools.combinations(remaining_agents, n):
-            highest_clues, score = self.get_highest_blue_clue(word_set, penalty)
+            highest_clues, score = self.get_highest_blue_clue(
+                word_set, penalty)
             heapq.heappush(pq, (-1 * score, highest_clues, word_set))
 
         best_clues = []
         best_board_words_for_clue = []
         best_scores = []
         count = 0
-        i = 0 
+        i = 0
         while pq:
             # print("pq: ", pq)
             print(i)
@@ -42,16 +44,18 @@ class Spymaster:
 
             if count >= 5:
                 break
-            
+
             best_clues.append(clues)
             best_scores.append(score)
             best_board_words_for_clue.append(word_set)
 
             count += 1
 
-        for clue, words in zip(best_clues, best_board_words_for_clue): 
+        for clue, words in zip(best_clues, best_board_words_for_clue):
             if clue not in self.used_clues:
                 self.used_clues.append(clue)
+                # self.history.append([clue, words])
+                self.history += f"Clue: {clue[0].upper()} 2 - Words: {words[0].upper()} and {words[1].upper()}\n"
                 return (clue, words)
 
     def get_highest_blue_clue(self, chosen_words, penalty=1.0):
@@ -59,7 +63,7 @@ class Spymaster:
         for word in chosen_words:
             nns = self.weighted_nn[word]
             potential_clues.update(nns)
-        
+
         highest_scoring_clues = []
         highest_score = float("-inf")
 
@@ -71,19 +75,21 @@ class Spymaster:
                 if clue in self.weighted_nn[blue_word]:
                     blue_word_counts.append(self.weighted_nn[blue_word][clue])
                 else:
-                    blue_word_counts.append(self.embedding.get_word_similarity(blue_word, clue))
-            
-            embedding_score = self.embedding.penalise(chosen_words, clue, self.red_words)
+                    blue_word_counts.append(
+                        self.embedding.get_word_similarity(blue_word, clue))
+
+            embedding_score = self.embedding.penalise(
+                chosen_words, clue, self.red_words)
             score = sum(blue_word_counts) + embedding_score
 
             # print(clue, len(blue_word_counts))
-            
+
             if score > highest_score:
                 highest_scoring_clues = [clue]
                 highest_score = score
             elif score == highest_score:
                 highest_scoring_clues.append(clue)
-        
+
         return highest_scoring_clues, highest_score
 
     def get_most_similar(self, words):
@@ -91,12 +97,11 @@ class Spymaster:
         for clue in potentials:
             if self.is_valid_clue(clue) and "_" not in clue:
                 return clue, words
-            
 
     def generate_red_clue(self, n, penalty, remaining_agents):
         if len(remaining_agents) == 1:
             return self.get_most_similar(remaining_agents)
-            
+
         pq = []
 
         for word_set in itertools.combinations(remaining_agents, n):
@@ -115,26 +120,27 @@ class Spymaster:
 
             if count >= 5:
                 break
-            
+
             best_clues.append(clues)
             best_scores.append(score)
             best_board_words_for_clue.append(word_set)
 
-            count += 1 
+            count += 1
 
         print(zip(best_clues, best_board_words_for_clue))
-        for clue, words in zip(best_clues, best_board_words_for_clue): 
+        for clue, words in zip(best_clues, best_board_words_for_clue):
             if clue not in self.used_clues:
                 self.used_clues.append(clue)
+                # self.history.append([clue, words])
+                self.history += f"Clue: {clue[0].upper()} 2 - Words: {words[0].upper()} and {words[1].upper()}\n"
                 return (clue, words)
-
 
     def get_highest_red_clue(self, chosen_words, penalty=1.0):
         potential_clues = set()
         for word in chosen_words:
             nns = self.weighted_nn[word]
             potential_clues.update(nns)
-        
+
         highest_scoring_clues = []
         highest_score = float("-inf")
 
@@ -146,9 +152,11 @@ class Spymaster:
                 if clue in self.weighted_nn[red_word]:
                     red_word_counts.append(self.weighted_nn[red_word][clue])
                 else:
-                    red_word_counts.append(self.embedding.get_word_similarity(red_word, clue))
-            
-            embedding_score = self.embedding.penalise(chosen_words, clue, self.blue_words)
+                    red_word_counts.append(
+                        self.embedding.get_word_similarity(red_word, clue))
+
+            embedding_score = self.embedding.penalise(
+                chosen_words, clue, self.blue_words)
             score = sum(red_word_counts) + embedding_score
 
             if score > highest_score:
@@ -157,7 +165,7 @@ class Spymaster:
                 highest_score = score
             elif score == highest_score:
                 highest_scoring_clues.append(clue)
-        
+
         return highest_scoring_clues, highest_score
 
     def is_valid_clue(self, clue):

@@ -1,3 +1,4 @@
+from socket import gethostname
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, send, join_room
 from datetime import datetime, timedelta
@@ -10,7 +11,7 @@ from ai.glove import Glove
 from ai.spymaster import Spymaster
 import time
 from experiment import Experiment
-from evaluation import Evaluation
+from evaluation import Evaluation, GroupEvaluation
 import pickle
 import os
 
@@ -26,13 +27,10 @@ socket = SocketIO(app, cors_allowed_origins="*")
 # word2vec
 # word2vec = Word2Vec()
 # print("made word2vec")
-# with open("./ai/word2vec.obj", "rb") as f:
-# word2vec = pickle.load(f)
 
 # GloVe
 glove = Glove()
 print("made glove")
-# with open("./ai/word2vec.obj", "rb") as f:
 
 
 ACTIVE_USERS = -1  # app counts as a connection???
@@ -41,17 +39,17 @@ AI_ROOMS = {}
 EXPERIMENTS = {}
 EVALUATIONS = []
 
-# files = [
-#     f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
+files = [
+    f"results/{f}" for f in os.listdir("./results/") if os.path.isfile(f"results/{f}")]
 
-# for file in files:
-#     with open(file, "rb") as f:
-#         exp = pickle.load(f)
-#         # print(f"--- File: {file} ---")
-#         e = Evaluation(exp)
-#         for b in e.e.game2.board:
-#             e.e.game2.board[b] = False
-#         EVALUATIONS.append(e)
+for file in files:
+    with open(file, "rb") as f:
+        exp = pickle.load(f)
+        # print(f"--- File: {file} ---")
+        e = Evaluation(exp)
+        for b in e.e.game2.board:
+            e.e.game2.board[b] = False
+        EVALUATIONS.append(e)
 
 
 @app.route("/rand")
@@ -157,11 +155,9 @@ def request_clue(data):
     print("requesting clue")
     gameId = data["gameId"]
     game = AI_ROOMS[gameId]["game"]
-    print(AI_ROOMS)
     # print(game.board)
     spymaster = AI_ROOMS[gameId]["spymaster"]
     team = data["team"]
-    print(team)
     if team == "red":
         clue = spymaster.generate_red_clue(2, 1, game.remaining_agents("red"))
     else:
@@ -169,9 +165,10 @@ def request_clue(data):
             2, 1, game.remaining_agents("blue"))
     data["clue"] = [f"{clue[0][0]} 2"]
     print(f"Generated: {clue}")
+    print(f"\nboard:{game.solution}\n")
+
     game.set_guesses(len(clue[1]) + 1)
     game.current_clue = clue[0]
-    print(game.current_clue)
     emit("send-state", game.to_json(), room=data["gameId"])
     emit("send-clue", data, room=data["gameId"])
 
@@ -203,13 +200,20 @@ def end_round(data):
     emit("send-state", game.to_json(), room=data["gameId"])
 
 
-@socket.on("game_over")
-def game_over(gameId):
-    game = ROOMS[gameId]
+@socket.on("game-over")
+def game_over(data):
+    if data["ai"]:
+        game = AI_ROOMS[data["gameId"]]["game"]
+        spymaster = AI_ROOMS[data["gameId"]]["spymaster"]
+        game.history = spymaster.history
+    else:
+        game = ROOMS[data["gameId"]]
     game.over = True
 
+    emit("game-over", game.to_json(), room=data["gameId"])
 
-@socket.on("user_join")
+
+@ socket.on("user_join")
 def user_join(data):
     game = ROOMS[data["gameId"]]
     print(game.id)
@@ -219,7 +223,7 @@ def user_join(data):
     emit("send-state", game.to_json(), room=data["gameId"])
 
 
-@socket.on("ai_user_join")
+@ socket.on("ai_user_join")
 def ai_user_join(data):
     game = AI_ROOMS[data["gameId"]]["game"]
     user = User(request.sid, data["name"], data["team"], data["role"])
@@ -228,16 +232,17 @@ def ai_user_join(data):
     emit("send-state", game.to_json(), room=data["gameId"])
 
 
-@socket.on("refresh")
+@ socket.on("refresh")
 def refresh(gameId):
     print("refreshing")
     game = ROOMS[gameId]
     game.over = False
     game.create_game()
+    print()
     emit("send-state", game.to_json(), room=gameId)
 
 
-@socket.on("user_leave")
+@ socket.on("user_leave")
 def user_leave(data):
 
     game = ROOMS[data["gameId"]]
@@ -250,19 +255,20 @@ def user_leave(data):
 # ##########
 
 
-@socket.on("experiment-create")
+@ socket.on("experiment-create")
 def experiment_create(expId):
     print("##### making experiment #####")
-    print("expId: ", expId)
-    e = Experiment(expId, glove)
-    EXPERIMENTS[expId] = e
+    # print("expId: ", expId)
+    e = EVALUATIONS[0]
+    # e = Experiment(expId, glove)
+    # EXPERIMENTS[expId] = e
     # e.generate_clue()
     # emit("send-experiment", data, room=request.sid)
     print("sending exp")
-    emit("before-experiment-join", e.game.to_json(), room=request.sid)
+    emit("before-experiment-join", e.e.game.to_json(), room=request.sid)
 
 
-@socket.on("experiment")
+@ socket.on("experiment")
 def experiment(expId):
     print("1: ", request.sid)
     e = EXPERIMENTS[expId]
@@ -321,14 +327,14 @@ def send_experiment(data):
 @ socket.on("save-experiment")
 def save_experiment(expId):
     e = EXPERIMENTS[expId]
-    # with open(f"results/{e.id}.pkl", "wb") as f:
-    #     pickle.dump(e, f)
+    with open(f"results/{e.id}.pkl", "wb") as f:
+        pickle.dump(e, f)
 
 
 # ##########
 # Evaluation
 # ##########
-@socket.on("before-evaluation-join")
+@ socket.on("before-evaluation-join")
 def before_evaluation_join():
     print("joining")
     ind = 0
@@ -339,7 +345,7 @@ def before_evaluation_join():
     emit("before-evaluation-join", data, room=request.sid)
 
 
-@socket.on("evaluation")
+@ socket.on("evaluation")
 def evaluation(data):
     gameInd = data["gameInd"]
     clueInd = data["gameInd"]
@@ -357,7 +363,7 @@ def evaluation(data):
     emit("send-evaluation", data, room=request.sid)
 
 
-@socket.on("make-vote")
+@ socket.on("make-vote")
 def make_vote(data):
     clueInd = data["clueInd"]
     print(clueInd)
@@ -375,6 +381,9 @@ def make_vote(data):
 
         emit("send-evaluation", data, room=request.sid)
     else:
+        gameInd = data["gameInd"] - 1
+        e = EVALUATIONS[gameInd]
+        e.make_vote(data["vote"])
         gameInd = data["gameInd"]
         clueInd = 0
         e = EVALUATIONS[gameInd]
@@ -389,6 +398,16 @@ def make_vote(data):
 
         data = {"clues": clues, "words": words, "game": e.e.game2.to_json()}
         emit("evaluation-next-game", data, room=request.sid)
+
+
+@ socket.on("save-evaluation")
+def save_evaluation():
+    print(EVALUATIONS)
+    g = GroupEvaluation(EVALUATIONS)
+    with open(f"evaluations/{datetime.now().strftime('%m-%d-%Y-%H:%M:%S')}.pkl", "wb") as f:
+        pickle.dump(g, f)
+
+    print("saved eval")
 
 
 if __name__ == "__main__":

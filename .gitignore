@@ -130,4 +130,5 @@ dmypy.json
 
 
 server/results/*
+server/evaluations/*
 server/data/*

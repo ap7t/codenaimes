@@ -61,7 +61,7 @@
 <!-- <svelte:window on:load={handleLoad} /> -->
 <div class="container">
 	<div class="clue">
-		Clue: {#if generating_clue}
+		<!-- Clue: {#if generating_clue}
 			<CircularProgress
 				class="my-four-colors"
 				style="height: 32px; width: 32px;"
@@ -70,7 +70,8 @@
 			/>
 		{:else}
 			<strong>{clue}</strong>
-		{/if}
+		{/if} -->
+		Clue: <strong>teeth</strong>
 	</div>
 	<div class="agentsGrid">
 		{#if $state != {}}

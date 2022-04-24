@@ -15,18 +15,19 @@ with open("agents.txt", "r") as f:
     agents = f.read().split("\n")
 
 agents.pop()
+
+
 class Game:
     def __init__(self, id="dev"):
         self.id = id
         self.start_colour = RED
         self.date_created = datetime.now()
-        self.date_last_updated = self.date_created
         # TODO: self.players = players
         self.round = 0
         self.total_guesses = 0
         self.guesses = 0
-        self.num_red_agents = AGENTS_PER_TEAM + 1 
-        self.num_blue_agents = AGENTS_PER_TEAM 
+        self.num_red_agents = AGENTS_PER_TEAM + 1
+        self.num_blue_agents = AGENTS_PER_TEAM
         self.assassinated = False
         self.board = None
         self.solution = None
@@ -38,6 +39,7 @@ class Game:
         self.blue_agents = self.get_agents("B")
         self.civilians = self.get_agents("O")
         self.assassin = self.get_agents("X")
+        self.history = ""
 
     def to_json(self):
         return {
@@ -46,14 +48,14 @@ class Game:
             "board": self.board,
             "solution": self.solution,
             "date_created": str(self.date_created),
-            "date_last_updated": str(self.date_last_updated),
             "red_agents": self.num_red_agents,
             "blue_agents": self.num_blue_agents,
             "assassinated": self.assassinated,
             "round": self.round,
             "guesses": self.guesses,
             "current_clue": self.current_clue,
-            "users": len(self.users)
+            "users": len(self.users),
+            "history": self.history
         }
 
     def create_board(self):
@@ -66,12 +68,10 @@ class Game:
         self.board = dict.fromkeys(words, False)
         self.solution = dict(solution)
 
-
-
     def generate_words(self):
-        shuffle(agents) # newline in file is empty string
+        shuffle(agents)  # newline in file is empty string
         return agents[:TOTAL_PLAYERS]
-    
+
     def generate_positions(self):
         # TODO: not always red starting
         positions = [RED] * (AGENTS_PER_TEAM + 1)
@@ -98,15 +98,15 @@ class Game:
         self.board[word] = self.solution[word]
         print(self.board[word])
         # TODO: make rounds more than just one guess
-    
+
     def decrement_guesses(self):
         self.guesses -= 1
-        if self.guesses == 0: 
+        if self.guesses == 0:
             self.round += 1
 
     def set_guesses(self, guesses):
         self.guesses = guesses
-    
+
     def end_round(self):
         self.round += 1
         self.guesses = 0
@@ -121,11 +121,11 @@ class Game:
         return True if sid in self.users.keys() else False
 
     def get_agents(self, colour):
-        return [agent.lower() for agent, col in self.solution.items() if col == colour ]
+        return [agent.lower() for agent, col in self.solution.items() if col == colour]
 
     def remaining_agents(self, team):
         agents = self.red_agents if team == "red" else self.blue_agents
-        return  [a for a in agents if not self.board[a.upper()]]
+        return [a for a in agents if not self.board[a.upper()]]
 
     def __str__(self):
         return str(self.solution)

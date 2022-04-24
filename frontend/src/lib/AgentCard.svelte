@@ -12,13 +12,13 @@
 	export let name;
 	export let ai;
 	export let toast = true;
-	let msg;
-
 	let classString = "agentCard";
+	let msg;
 
 	let gameId = $page.params.id;
 
 	$: {
+		classString = classString.split(" ")[0];
 		switch (colour) {
 			case "R":
 				classString += " redAgent";

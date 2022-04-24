@@ -16,6 +16,7 @@
 	let open = false;
 	let winner;
 	let winningMsg;
+	let history;
 	$: whoLost = $state.round % 2 != 0 ? "Red" : "Blue";
 
 	socket.on("send-state", function (game) {
@@ -25,23 +26,31 @@
 	$: if ($state.red_agents == 0) {
 		winner = "Red";
 		winningMsg = "Well done red team. Play again?";
-		open = true;
-		socket.emit("game-over", $state.gameId);
+		let data = { gameId: $state.gameId, ai: ai };
+		socket.emit("game-over", data);
 	}
 
 	$: if ($state.blue_agents == 0) {
 		winner = "Blue";
 		winningMsg = "Well done blue team. Play again?";
-		open = true;
-		socket.emit("game-over", $state.gameId);
+		let data = { gameId: $state.gameId, ai: ai };
+		socket.emit("game-over", data);
 	}
 
 	$: if ($state.assassinated) {
 		winner = "Assassin";
 		winningMsg = `${whoLost} team found the assassin so they lose! Play again?`;
-		open = true;
-		socket.emit("game-over", $state.gameId);
+		let data = { gameId: $state.gameId, ai: ai };
+		socket.emit("game-over", data);
 	}
+
+	socket.on("game-over", function (game) {
+		console.log(game);
+
+		history = game.history.split("\n");
+		console.log(history);
+		open = true;
+	});
 
 	onMount(() => {
 		let data = {
@@ -66,7 +75,9 @@
 
 	function refresh(str) {
 		if (str === "yes") {
-			socket.emit("refresh ", $state.gameId);
+			console.log("sending refresh");
+			let data = { gameId: $state.gameId };
+			socket.emit("refresh", data);
 		} else {
 			goto("/");
 		}
@@ -76,7 +87,18 @@
 <Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
 	<!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
 	<Title id="simple-title">{winner} Won</Title>
-	<Content id="simple-content">{winningMsg}</Content>
+	<Content id="simple-content"
+		>{winningMsg}
+		<ul>
+			{#if history}
+				{#each history as h}
+					{#if h}
+						<li>{h}</li>
+					{/if}
+				{/each}
+			{/if}
+		</ul>
+	</Content>
 	<Actions>
 		<Button on:click={() => refresh("no")}>
 			<Label>No</Label>

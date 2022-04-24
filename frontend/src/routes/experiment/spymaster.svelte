@@ -70,18 +70,20 @@
 <!-- <svelte:window on:load={handleLoad} /> -->
 <div class="container">
 	<div class="clue">
-		Words: {#if generating_clue}
-			<CircularProgress
+		Words:
+		<!-- {#if generating_clue} -->
+		<!-- <CircularProgress
 				class="my-four-colors"
 				style="height: 32px; width: 32px;"
 				indeterminate
 				fourColor
 			/>
-		{:else}
-			<strong>{word1}</strong>
-			and
-			<strong>{word2}</strong>
-		{/if}
+		{:else} -->
+		<!-- <strong>{word1}</strong> -->
+		<strong>cat</strong>
+		and
+		<strong>back</strong>
+		<!-- {/if} -->
 	</div>
 	<div class="agentsGrid">
 		{#if $state != {}}
