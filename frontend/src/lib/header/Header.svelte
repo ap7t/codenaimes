@@ -33,12 +33,12 @@
 				<Label>Experiment</Label>
 			</Button>
 		</li> -->
-		<li>
+		<!-- <li>
 			<Button on:click={() => goto("/about")}>
 				<Icon class="material-icons">info</Icon>
 				<Label>About</Label>
 			</Button>
-		</li>
+		</li> -->
 	</ul>
 </nav>
 
